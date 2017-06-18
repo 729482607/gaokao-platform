@@ -6,8 +6,15 @@ import java.util.List;
 import com.C1200.CollegeScoreLib.dao.BaseDao;
 import com.C1200.CollegeScoreLib.entity.Province;
 
+
+/**
+* @author jiangtao
+* @purpose 实体类对应的数据库操作类：省 
+*/
 public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Province>{
 	
+	
+	//获取数据库tb_province表中所有的数据
 	public List<Province> getAllProvince()   //@代号：ljt 
 	{
 		List<Province> list = new ArrayList<Province>();
@@ -20,6 +27,8 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 		return list;
 	}
 	
+	
+	//根据省名称获取省ID
 	public int getProvinceIdByProvinceNmae(String province_name)   //@代号：ljt 
 	{
 		int id = -1;
@@ -33,7 +42,9 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 		return id;
 	}
 	
-	public String getProvinceNameById(int province_id)   //@代号：ljt 
+	
+	//根据省ID获取省名称
+	public String getProvinceNameBySchoolId(int province_id)   //@代号：ljt 
 	{
 		String s_name = "";
 		try {

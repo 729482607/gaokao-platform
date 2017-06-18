@@ -7,8 +7,15 @@ import com.C1200.CollegeScoreLib.dao.BaseDao;
 //import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
 import com.C1200.CollegeScoreLib.entity.School;
 
+
+/**
+* @author jiangtao
+* @purpose 实体类对应的数据库操作类：学校 
+*/
 public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School>{
 
+	
+	//获取数据库tb_school表中所有的数据
 	public List<School> getAllSchool()   //@代号：ljt 
 	{
 		List<School> list = new ArrayList<School>();
@@ -21,7 +28,8 @@ public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School
 		return list;
 	}
 	
-	public int getIdBySchool(String school_name)   //@代号：ljt 
+	//根据学校名获取学校ID
+	public int getSchoolIdBySchoolName(String school_name)   //@代号：ljt 
 	{
 		int id = -1;
 		try {
@@ -34,7 +42,9 @@ public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School
 		return id;
 	}
 	
-	public String getSchoolNameById(int school_id)   //@代号：ljt 
+	
+	//根据学校ID获取学校名
+	public String getSchoolNameBySchoolId(int school_id)   //@代号：ljt 
 	{
 		String s_name = "";
 		try {

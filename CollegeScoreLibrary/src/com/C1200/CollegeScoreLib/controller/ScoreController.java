@@ -38,7 +38,7 @@ public class ScoreController {
 		return Clist;
 	}
 	
-	
+	//该API调用方式如下：
 	//http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getProvinceBatchScore?province=湖南&year=2012	
 	@GET
 	@Path("/getProvinceBatchScore")
