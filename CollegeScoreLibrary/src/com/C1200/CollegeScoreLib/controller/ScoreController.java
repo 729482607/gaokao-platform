@@ -3,8 +3,10 @@ package com.C1200.CollegeScoreLib.controller;
 import com.C1200.CollegeScoreLib.entity.Province;
 import com.C1200.CollegeScoreLib.entity.School;
 import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
+import com.C1200.CollegeScoreLib.entity.ScoreRank;
 import com.C1200.CollegeScoreLib.service.CollegeService;
 import com.C1200.CollegeScoreLib.service.ProvinceService;
+import com.C1200.CollegeScoreLib.service.ScoreRankService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class ScoreController {
 	
 	private CollegeService cs = new CollegeService();
 	private ProvinceService ps = new ProvinceService();
+	private ScoreRankService srs = new ScoreRankService();
 	
 	@GET
 	@Path("/getColleges")
@@ -88,6 +91,21 @@ public class ScoreController {
 		
 	}
 	
+	//该API调用方式如下：
+	//http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getScoreRank?province=湖南&year=2012&WL=W
+	@GET
+	@Path("/getScoreRank")
+	@Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
+	public List<ScoreRank> getScoreRank(@QueryParam("province") String province_name,
+			@QueryParam("year") String year, @QueryParam("WL") String WL){
+		int province_id = ps.getProvinceIdByProvinceNmae(province_name);
+		ScoreRank sr = new ScoreRank();
+		sr.setProvince_id(province_id);
+		sr.setYear(year);
+		sr.setWl(WL);
+		List<ScoreRank> list = srs.getScoreRankByAttrs(sr);
+		return list;
+	}
 	
 	@GET
 	@Path("/getJSONtest")
