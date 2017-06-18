@@ -20,5 +20,6 @@ public interface BaseDao<T> {
 	public T getEntry(String sql,Object... objs)  throws Exception;
 	public void excSql(String sql,Object... objs)throws Exception;
 	public Object excSql_retValue(String sql,ResultSetHandler rh,Object... objs) throws Exception;
+	public String getSQLqueryString(T t) throws Exception;
 
 }

@@ -12,7 +12,7 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 	{
 		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();
 		try {
-			list = super.getEntrys("select * from tb_ProvinceBatchScore");
+			list = super.getAllEntrys();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -20,27 +20,36 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 		return list;
 	}
 	
-	public List<ProvinceBatchScore> getProvinceBatchScoreByProvinceAndYear(int province_id, String year){
-		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();
+	//@代号：ljt 
+	public List<ProvinceBatchScore> getProvinceBatchScoreByAttrs(ProvinceBatchScore pbs, int page, int size){
+		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();	
+		int pass_count = size*(page-1);
+		String sql = "select * from tb_ProvinceBatchScore where ";
 		try {
-			list = super.getEntrys("select * from tb_ProvinceBatchScore where province_id=? and year = ?",province_id,year);
-			
+			sql+=super.getSQLqueryString(pbs);
+			if(page>0 && size>0){
+				sql+=" limit "+String.valueOf(pass_count)+","+String.valueOf(size);
+			}
+			list = super.getEntrys(sql);
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
+		
 	}
 	
-//	public String getProvinceBatchScoreByProvinceId(int province_id)   //@代号：ljt 
-//	{
-//		String s_name = "";
+	//@代号：ljt    
+	//这是一个示例，实际不需要了
+//	public List<ProvinceBatchScore> getProvinceBatchScoreByProvinceAndYear(int province_id, String year){
+//		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();
 //		try {
-//			ProvinceBatchScore provinceBatchScore = (ProvinceBatchScore)getEntry("select * from tb_ProvinceBatchScore where province_id = ?", province_id);
+//			list = super.getEntrys("select * from tb_ProvinceBatchScore where province_id=? and year = ?",province_id,year);
 //			
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-//		return s_name;
-//	}	
-	
+//		return list;
+//	}
+		
 }

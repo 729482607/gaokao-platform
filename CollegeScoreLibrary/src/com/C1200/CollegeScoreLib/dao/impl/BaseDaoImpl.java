@@ -31,7 +31,7 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 	private Boolean increment;
 	
 	String tableName="";
-	static String tablePredix = "";
+	static String tablePredix = "tb_";
 	public BaseDaoImpl()
 	{
 		try {
@@ -218,6 +218,60 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 	public void deleteEntry(String sql, Object... objs) throws Exception {
 		QueryRunner qr=new QueryRunner();
 		qr.query(JDBCUtils.getConnection(),sql, new BeanHandler(clazz), objs);
+	}
+	
+	
+	//@代号：ljt 
+	@Override
+	public String getSQLqueryString(T t) throws Exception {
+		
+		String QueryString="";
+//		String attr="";
+//		String attr_value="";
+		Field[] fields=clazz.getDeclaredFields();
+		for (Field field : fields) {
+			String name=field.getName();
+			if(name.trim().startsWith("_"))
+			{
+				continue;
+			}
+			if(name.trim().equals(primaryKey)&&increment)    //SQL SERVER insert语句自增主键不用管，也不能用0作假参。MYSQL可用0.
+			{
+				continue;
+			}
+			String methodname="";
+			if (field.getType() == Boolean.TYPE)
+			{
+				methodname="is"+name.toUpperCase().substring(0, 1)+name.substring(1);
+			}
+			else
+				methodname="get"+name.toUpperCase().substring(0, 1)+name.substring(1);
+			Method m=clazz.getMethod(methodname);
+			if(field.getType() == Integer.TYPE){
+				int int_value = (Integer)m.invoke(t);
+				if (int_value!=0)
+				{
+					QueryString += name+"="+String.valueOf(int_value)+" and ";
+//					attr += name+"=? and ";
+//					attr_value += String.valueOf(int_value)+",";
+				}
+			}
+			else{
+				String str_value =  (String)m.invoke(t);
+				if(str_value != null && !str_value.equals("")){
+					QueryString += name+"='"+str_value+"' and ";
+//					attr += name+"=? and ";
+//					attr_value += str_value+",";
+				}
+			}
+		}
+		if(QueryString.indexOf('a')>0){
+			QueryString = QueryString.substring(0, QueryString.lastIndexOf('a')-1);
+		}
+//		attr = attr.substring(0, attr.lastIndexOf('a')-1);
+//		attr_value = attr_value.substring(0, attr_value.lastIndexOf(','));
+//		QueryString = attr+"--"+attr_value;
+		return QueryString;
 	}
 
 

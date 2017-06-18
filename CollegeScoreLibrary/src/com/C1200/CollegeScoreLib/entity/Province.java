@@ -2,11 +2,16 @@ package com.C1200.CollegeScoreLib.entity;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+
+/**
+* @author jiangtao
+* @purpose 实体类：省 （与数据库tb_province表各字段名一一对应）
+*/
+@XmlRootElement		//该脚注用于注册rest API
 public class Province implements BaseEntity{
 	private int province_id;
 	private String province_name;
-	private String locate_area;
+	private String locate_area;    //所属区位
 	
 	public Province(){}
 	

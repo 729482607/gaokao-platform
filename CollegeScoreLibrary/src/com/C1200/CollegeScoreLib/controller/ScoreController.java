@@ -37,13 +37,23 @@ public class ScoreController {
 		Clist.add(new School(2,"is 2"));
 		return Clist;
 	}
-//http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getProvinceBatchScore?province=湖南&year=2012	
+	
+	
+	//http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getProvinceBatchScore?province=湖南&year=2012	
 	@GET
 	@Path("/getProvinceBatchScore")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)			//@代号：ljt 
 	public List<ProvinceBatchScore> getProvinceBatchScore(@QueryParam("province") String province_name,
-			@QueryParam("year") String year){
-		List<ProvinceBatchScore> PBSlist = ps.getProvinceBatchScoreByProvinceAndYear(province_name, year);
+			@QueryParam("year") String year, @QueryParam("WL") String WL, @QueryParam("batch") String batch, 
+			@QueryParam("page") int page, @QueryParam("size") int size){
+		int province_id = ps.getProvinceIdByProvinceNmae(province_name);
+		ProvinceBatchScore pbs = new ProvinceBatchScore();
+		pbs.setProvince_id(province_id);
+		pbs.setYear(year);
+		pbs.setWl(WL);
+		pbs.setBatch(batch);
+		System.out.println(page);
+		List<ProvinceBatchScore> PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
 		return PBSlist;
 	}
 	

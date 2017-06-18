@@ -8,7 +8,7 @@ import com.C1200.CollegeScoreLib.entity.School;
 public class CollegeService {
 	private SchoolDaoImpl collegeDaoImpl = new SchoolDaoImpl();
 	
-	public List<School> getAllCollege()
+	public List<School> getAllCollege()		//@代号：ljt 
 	{
 		List<School> Clist = collegeDaoImpl.getAllSchool();
 		if(Clist != null && Clist.size()>0)

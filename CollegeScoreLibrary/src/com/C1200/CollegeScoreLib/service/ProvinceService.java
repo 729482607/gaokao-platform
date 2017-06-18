@@ -13,7 +13,9 @@ public class ProvinceService {
 	private ProvinceDaoImpl provinceDao = new ProvinceDaoImpl();
 	private ProvinceBatchScoreDaoImpl provinceBatchScoreDao = new ProvinceBatchScoreDaoImpl();
 	
-	public List<ProvinceBatchScore> getAllProvinceBatchScore()
+	
+	
+	public List<ProvinceBatchScore> getAllProvinceBatchScore()		//@代号：ljt 
 	{
 		List<ProvinceBatchScore> pllist = provinceBatchScoreDao.getAllProvinceBatchScore();
 		if(pllist != null && pllist.size()>0)
@@ -22,11 +24,11 @@ public class ProvinceService {
 		}
 		return null;
 	}
-	
-	public List<ProvinceBatchScore> getProvinceBatchScoreByProvinceAndYear(String province_name, String year)
+
+	//@代号：ljt 
+	public List<ProvinceBatchScore> getProvinceBatchScoreByAttrs(ProvinceBatchScore pbs, int page, int size)
 	{
-		int province_id = getProvinceIDByName(province_name);
-		List<ProvinceBatchScore> pllist = provinceBatchScoreDao.getProvinceBatchScoreByProvinceAndYear(province_id, year);
+		List<ProvinceBatchScore> pllist = provinceBatchScoreDao.getProvinceBatchScoreByAttrs(pbs,page,size);
 		if(pllist != null && pllist.size()>0)
 		{
 			return pllist;
@@ -34,6 +36,8 @@ public class ProvinceService {
 		return null;
 	}
 	
+	
+	//@代号：ljt 
 	public List<Province> getAllProvince()
 	{
 		List<Province> pllist = provinceDao.getAllProvince();
@@ -44,15 +48,14 @@ public class ProvinceService {
 		return null;
 	}
 	
-	public int getProvinceIDByName(String province_name){
-		return provinceDao.getIdByProvince(province_name);
+	
+	//@代号：ljt 
+	public int getProvinceIdByProvinceNmae(String province_name){
+		return provinceDao.getProvinceIdByProvinceNmae(province_name);
 	}
 	
-	public String getProvinceNameByID(int province_id){
-		
-		return null;
-	}
 	
+	//@代号：ljt 
 	public String getProvinceNameByIDFromList(int province_id, List<Province> allprovince){
 		for (int i = 0; i < allprovince.size(); i++) {
 			Province province = allprovince.get(i);
@@ -60,7 +63,6 @@ public class ProvinceService {
 				return province.getProvince_name();
 			}
 		}
-		
 		return null;
 	}
 	

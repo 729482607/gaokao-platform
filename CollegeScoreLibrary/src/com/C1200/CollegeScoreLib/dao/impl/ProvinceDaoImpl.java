@@ -20,7 +20,7 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 		return list;
 	}
 	
-	public int getIdByProvince(String province_name)   //@代号：ljt 
+	public int getProvinceIdByProvinceNmae(String province_name)   //@代号：ljt 
 	{
 		int id = -1;
 		try {
