@@ -12,6 +12,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.C1200.CollegeScoreLib.dao.BaseDao;
 import com.C1200.CollegeScoreLib.entity.BaseEntity;
@@ -226,8 +227,6 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 	public String getSQLqueryString(T t) throws Exception {
 		
 		String QueryString="";
-//		String attr="";
-//		String attr_value="";
 		Field[] fields=clazz.getDeclaredFields();
 		for (Field field : fields) {
 			String name=field.getName();
@@ -252,26 +251,58 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 				if (int_value!=0)
 				{
 					QueryString += name+"="+String.valueOf(int_value)+" and ";
-//					attr += name+"=? and ";
-//					attr_value += String.valueOf(int_value)+",";
 				}
 			}
 			else{
 				String str_value =  (String)m.invoke(t);
 				if(str_value != null && !str_value.equals("")){
 					QueryString += name+"='"+str_value+"' and ";
-//					attr += name+"=? and ";
-//					attr_value += str_value+",";
 				}
 			}
 		}
 		if(QueryString.indexOf('a')>0){
 			QueryString = QueryString.substring(0, QueryString.lastIndexOf('a')-1);
 		}
-//		attr = attr.substring(0, attr.lastIndexOf('a')-1);
-//		attr_value = attr_value.substring(0, attr_value.lastIndexOf(','));
-//		QueryString = attr+"--"+attr_value;
+
 		return QueryString;
+	}
+
+	@Override
+	public JSONObject getJSONObject(T t) throws Exception {
+		JSONObject json = new JSONObject();
+		Field[] fields=clazz.getDeclaredFields();
+		for (Field field : fields) {
+			String name=field.getName();
+			if(name.trim().startsWith("_"))
+			{
+				continue;
+			}
+			if(name.trim().equals(primaryKey)&&increment)    //SQL SERVER insert语句自增主键不用管，也不能用0作假参。MYSQL可用0.
+			{
+				continue;
+			}
+			String methodname="";
+			if (field.getType() == Boolean.TYPE)
+			{
+				methodname="is"+name.toUpperCase().substring(0, 1)+name.substring(1);
+			}
+			else
+				methodname="get"+name.toUpperCase().substring(0, 1)+name.substring(1);
+			Method m=clazz.getMethod(methodname);
+			
+			if(field.getType() == Integer.TYPE){
+				int int_value = (Integer)m.invoke(t);
+				json.append(name, int_value);
+			}
+			else{
+				String str_value =  (String)m.invoke(t);
+				if(str_value != null && !str_value.equals("")){
+					json.append(name, str_value);
+				}
+			}
+		}
+
+		return json;
 	}
 
 

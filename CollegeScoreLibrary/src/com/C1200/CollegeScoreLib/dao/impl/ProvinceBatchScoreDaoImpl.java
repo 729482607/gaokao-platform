@@ -3,6 +3,8 @@ package com.C1200.CollegeScoreLib.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONObject;
+
 import com.C1200.CollegeScoreLib.dao.BaseDao;
 import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
 
@@ -40,11 +42,15 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 	public List<ProvinceBatchScore> getProvinceBatchScoreByAttrs(ProvinceBatchScore pbs, int page, int size){
 		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();	
 		int pass_count = size*(page-1);
-		String sql = "select * from tb_ProvinceBatchScore where ";
+		String sql = "select * from tb_ProvinceBatchScore";
+		String SQLqueryString = "";
 		try {
-			sql+=super.getSQLqueryString(pbs);    //getSQLqueryString()根据类实例的各属性的值是否为有效值，来拼接sql查询语句
-			if(page>0 && size>0){
-				sql+=" limit "+String.valueOf(pass_count)+","+String.valueOf(size);
+			SQLqueryString = super.getSQLqueryString(pbs); 
+			if(!SQLqueryString.equals("") && SQLqueryString!=null){
+				sql+=" where "+SQLqueryString;    //getSQLqueryString()根据类实例的各属性的值是否为有效值，来拼接sql查询语句
+				if(page>0 && size>0){
+					sql+=" limit "+String.valueOf(pass_count)+","+String.valueOf(size);
+				}
 			}
 			list = super.getEntrys(sql);
 	
@@ -53,6 +59,15 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 		}
 		return list;
 		
+	}
+	
+	public JSONObject getProvinceBatchScoreJSONObject(ProvinceBatchScore pbs){
+		try {
+			return super.getJSONObject(pbs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	//@代号：ljt    

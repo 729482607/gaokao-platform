@@ -1,5 +1,6 @@
 package com.C1200.CollegeScoreLib.controller;
 
+import com.C1200.CollegeScoreLib.entity.Province;
 import com.C1200.CollegeScoreLib.entity.School;
 import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
 import com.C1200.CollegeScoreLib.service.CollegeService;
@@ -15,7 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONArray;
-
+import org.codehaus.jettison.json.JSONObject;
 
 
 
@@ -43,18 +44,48 @@ public class ScoreController {
 	@GET
 	@Path("/getProvinceBatchScore")
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ljt 
-	public List<ProvinceBatchScore> getProvinceBatchScore(@QueryParam("province") String province_name,
-			@QueryParam("year") String year, @QueryParam("WL") String WL, @QueryParam("batch") String batch, 
-			@QueryParam("page") int page, @QueryParam("size") int size){
-		int province_id = ps.getProvinceIdByProvinceNmae(province_name);
+	public JSONArray getProvinceBatchScore(@QueryParam("province") String province_name,
+			@QueryParam("year") String year, @QueryParam("wl") String WL, @QueryParam("batch") String batch, 
+			@QueryParam("page") int page, @QueryParam("size") int size) throws Exception{
+		int province_id = 0;
+		List<ProvinceBatchScore> PBSlist = null;
+		JSONArray ret_jsonarray = new JSONArray();
+		JSONObject json = new JSONObject();
+		
 		ProvinceBatchScore pbs = new ProvinceBatchScore();
-		pbs.setProvince_id(province_id);
 		pbs.setYear(year);
 		pbs.setWl(WL);
 		pbs.setBatch(batch);
-		System.out.println(page);
-		List<ProvinceBatchScore> PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
-		return PBSlist;
+		
+		//当省份作为查询参数时
+		if(province_name!=null && !province_name.equals("")){
+			province_id = ps.getProvinceIdByProvinceNmae(province_name);
+			pbs.setProvince_id(province_id);
+			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
+			for (int i = 0; i < PBSlist.size(); i++) {
+				json = ps.getProvinceBatchScoreJSONObject(PBSlist.get(i));
+				ret_jsonarray.put(json);
+			}
+			return ret_jsonarray;
+		}
+		
+		//当省份不作为查询参数时，需获取每一个数据中province_id对应的province_name
+		else{
+			pbs.setProvince_id(province_id);
+			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
+			System.out.println(PBSlist.size());
+			List<Province> allprovince = ps.getAllProvince();
+			for (int i = 0; i < PBSlist.size(); i++) {
+				province_id = PBSlist.get(i).getProvince_id();
+				province_name = ps.getProvinceNameByIDFromList(province_id, allprovince);
+				json = ps.getProvinceBatchScoreJSONObject(PBSlist.get(i));
+				json.append("province_name", province_name);
+				ret_jsonarray.put(json);
+			}
+			
+			return ret_jsonarray;
+		}
+		
 	}
 	
 	

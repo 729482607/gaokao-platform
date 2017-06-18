@@ -31,7 +31,7 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 	//根据省名称获取省ID
 	public int getProvinceIdByProvinceNmae(String province_name)   //@代号：ljt 
 	{
-		int id = -1;
+		int id = 0;
 		try {
 			Province province = getEntry("select * from tb_Province where province_name = ?", province_name);
 			id = province.getProvince_id();
@@ -44,7 +44,7 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 	
 	
 	//根据省ID获取省名称
-	public String getProvinceNameBySchoolId(int province_id)   //@代号：ljt 
+	public String getProvinceNameByProvinceId(int province_id)   //@代号：ljt 
 	{
 		String s_name = "";
 		try {

@@ -2,6 +2,8 @@ package com.C1200.CollegeScoreLib.service;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONObject;
+
 import com.C1200.CollegeScoreLib.dao.impl.ProvinceBatchScoreDaoImpl;
 import com.C1200.CollegeScoreLib.dao.impl.ProvinceDaoImpl;
 import com.C1200.CollegeScoreLib.entity.Province;
@@ -49,11 +51,21 @@ public class ProvinceService {
 	}
 	
 	
+	//@代号：ljt
+	public JSONObject getProvinceBatchScoreJSONObject(ProvinceBatchScore pbs){
+		return provinceBatchScoreDao.getProvinceBatchScoreJSONObject(pbs);
+	}
+	
+	
 	//@代号：ljt 
 	public int getProvinceIdByProvinceNmae(String province_name){
 		return provinceDao.getProvinceIdByProvinceNmae(province_name);
 	}
 	
+	//@代号：ljt
+	public String getProvinceNameByProvinceId(int province_id){
+		return provinceDao.getProvinceNameByProvinceId(province_id);
+	}
 	
 	//@代号：ljt 
 	public String getProvinceNameByIDFromList(int province_id, List<Province> allprovince){

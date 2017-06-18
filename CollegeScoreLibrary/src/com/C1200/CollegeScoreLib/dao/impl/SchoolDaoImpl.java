@@ -31,7 +31,7 @@ public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School
 	//根据学校名获取学校ID
 	public int getSchoolIdBySchoolName(String school_name)   //@代号：ljt 
 	{
-		int id = -1;
+		int id = 0;
 		try {
 			School school = getEntry("select * from tb_School where school_name = ?", school_name);
 			id = school.getSchool_id();

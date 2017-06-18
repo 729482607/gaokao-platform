@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.codehaus.jettison.json.JSONObject;
 /**
  *
  * @param <T>
@@ -21,5 +22,6 @@ public interface BaseDao<T> {
 	public void excSql(String sql,Object... objs)throws Exception;
 	public Object excSql_retValue(String sql,ResultSetHandler rh,Object... objs) throws Exception;
 	public String getSQLqueryString(T t) throws Exception;
+	public JSONObject getJSONObject(T t) throws Exception;
 
 }
