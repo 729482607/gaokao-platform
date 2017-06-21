@@ -34,11 +34,7 @@ public class ScoreController {
 	@Path("/getColleges")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<School> getColleges(){
-		//List<College> Clist= cs.getAllCollege();
-		List<School> Clist= new ArrayList<School>();
-		Clist.add(new School(0,"is 0"));
-		Clist.add(new School(1,"is 1"));
-		Clist.add(new School(2,"is 2"));
+		List<School> Clist= cs.getAllCollege();
 		return Clist;
 	}
 	
@@ -76,7 +72,6 @@ public class ScoreController {
 		else{
 			pbs.setProvince_id(province_id);
 			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
-			System.out.println(PBSlist.size());
 			List<Province> allprovince = ps.getAllProvince();
 			for (int i = 0; i < PBSlist.size(); i++) {
 				province_id = PBSlist.get(i).getProvince_id();

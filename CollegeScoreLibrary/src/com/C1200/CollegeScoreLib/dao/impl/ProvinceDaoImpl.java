@@ -29,7 +29,7 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 	
 	
 	//根据省名称获取省ID
-	public int getProvinceIdByProvinceNmae(String province_name)   //@代号：ljt 
+	public int getProvinceIdByProvinceName(String province_name)   //@代号：ljt 
 	{
 		int id = 0;
 		try {

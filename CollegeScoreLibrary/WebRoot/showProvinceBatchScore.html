@@ -3,6 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+
+	<link type="text/css" rel="stylesheet" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" href="css/index.css" />
+	
 </head>
 <script src="js/jquery.min.js" type="text/javascript"></script>
 <style type="text/css">
@@ -54,7 +59,7 @@
                 var datas = msg;
                 for (i in datas) {
                 	if(datas[i].province_name != null){
-                    	str += "<tr><td>" + datas[i].province_name + "</td>"; 
+                    	str += "<tr class=\"recotitle\"><td>" + datas[i].province_name + "</td>"; 
                     }
                     else{
                     	str+="<tr><td>"+province_name+"</td>";
@@ -73,34 +78,39 @@
 
 
 <body>
-	<h2>省批次线查询Demo</h2>
-	<table border="1">
-		<tr>
-		<td>省份:<select id="province" name="province"></select>
+
+	<div class="content w1000">
+	<div class="inputout">
+	<h3>省批次线查询Demo</h3>
+	<div class="recoform">
+	<table border="1" style="width:750px;">
+		<tr class="recotitle">
+		<td>省份:&nbsp;<select id="province" name="province"></select>
 		
-		文理科:<select id="wl"  name="wl">
+		&nbsp;&nbsp;文理科:&nbsp;<select id="wl"  name="wl">
 		<option value="" ></option>
 		<option value="W" >文科</option>
 		<option value="L" >理科</option></select>
 										
-		录取批次:<select id="batch" name="batch">
+		&nbsp;&nbsp;录取批次:&nbsp;<select id="batch" name="batch">
 						<option value=""></option>
 						<option value="本科一批">本科一批</option>
 						<option value="本科二批">本科二批</option>
 						<option value="本科三批">本科三批</option>
 			</select>
 										
-		年份:<select id="year" name="year">
+		&nbsp;&nbsp;年份:&nbsp;<select id="year" name="year">
 			</select>
-										
-		<input id="chaxun" type="button" value="查询" />
+						
+		&nbsp;&nbsp;					
+		<input id="chaxun" type="button" value="查询" class='submit_a'/>
 										</td>
 								  	</tr>
 								  </table><br/>
 	
-	<table border="1">
+	<table border="1" style="width:750px;">
 		<thead>
-		<tr>
+		<tr class="recotitle" style="text-align: center;">
 			<th>省份</th>
 			<th>年份</th>
 			<th>文理科</th>
@@ -111,6 +121,11 @@
 		<tbody id="showdata"></tbody>
                     
 	</table>
-	<hr/>
+	</div>
+	</div>
+	</div>
+
+
+
 </body>
 </html>

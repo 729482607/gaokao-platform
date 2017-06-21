@@ -59,7 +59,7 @@ public class ProvinceService {
 	
 	//@代号：ljt 
 	public int getProvinceIdByProvinceNmae(String province_name){
-		return provinceDao.getProvinceIdByProvinceNmae(province_name);
+		return provinceDao.getProvinceIdByProvinceName(province_name);
 	}
 	
 	//@代号：ljt
