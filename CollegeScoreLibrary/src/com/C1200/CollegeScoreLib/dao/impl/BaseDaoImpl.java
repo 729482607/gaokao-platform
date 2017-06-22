@@ -12,6 +12,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.C1200.CollegeScoreLib.dao.BaseDao;
@@ -213,6 +214,12 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 	public Object excSql_retValue(String sql,ResultSetHandler sh, Object... objs) throws Exception {
 		QueryRunner qr=new QueryRunner();
 		return qr.query(JDBCUtils.getConnection(),sql,sh,objs);
+	}
+	
+	public int excSql_retSize(String sql, Object... objs) throws Exception {
+		QueryRunner qr=new QueryRunner();
+		long ret = (Long)qr.query(JDBCUtils.getConnection(),sql,new ScalarHandler(),objs);
+		return new Long(ret).intValue();
 	}
 
 	@Override

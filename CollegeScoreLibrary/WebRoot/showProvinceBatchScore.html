@@ -21,6 +21,14 @@
     }
 </style>
 <script type="text/javascript">
+	
+	var data = null;
+	var nowPage = 0;
+	var pageSize = 10;
+	var itemTotal = 0;
+	var pageTotal = 30;
+	var first_li = 1;
+	
 	function fillSelect(){
 	var obj=document.getElementById("year");
 	obj.add(new Option("",""));
@@ -39,8 +47,135 @@
 	}
 	
 	
+	
 	}
 	window.onload=fillSelect;
+
+	function page_ul_init(){
+		pageTotal = Math.ceil(parseInt(itemTotal)/parseInt(pageSize));
+		
+		var ul_str="";
+		ul_str+="<span>当前页：</span>";
+		ul_str+="<input id=\"pageGo_text\" type=\"text\"></input>";
+		ul_str+="<li id=\"pageGo\" style=\"margin-right:20px;\"><a>Go</a></li><li class=\"pageleft\"><a> </a></li>";
+		if(pageTotal<=4){
+			for(var i=0; i< pageTotal; i++){
+				ul_str+="<li id=\"p_"+(i+1)+"\"><a>"+(i+1)+"</a></li>";
+			}
+		}
+		else{
+			for(var i=0; i< pageTotal; i++){
+				if(i<3){
+					ul_str+="<li id=\"p_"+(i+1)+"\"><a>"+(i+1)+"</a></li>";
+				}
+			}
+			ul_str+="<li id=\"p_.\"><a>...</a></li>";
+			ul_str+="<li id=\"p_"+pageTotal+"\"><a>"+pageTotal+"</a></li>";
+			
+		}
+		ul_str+="<li class=\"pageright\"><a> </a></li>";
+		$(".clearFloat").html(ul_str);
+		$(".page span").html("当前页："+nowPage);
+		$("#p_1").addClass("pagehover");
+	}
+	
+	
+	$('li').live('click',function(){
+		if($(this).attr('id')=="pageGo"){
+			var go_page = $("#pageGo_text").val();
+			if(nowPage!=parseInt(go_page)){
+				if(first_li>parseInt(go_page) || parseInt(go_page)>first_li+2)
+				{
+					$("#p_"+(first_li+2)).attr('id','p_'+(parseInt(go_page)+2));
+					$("#p_"+(parseInt(go_page)+2)).html(parseInt(go_page)+2);
+					$("#p_"+(first_li+1)).attr('id','p_'+(parseInt(go_page)+1));
+					$("#p_"+(parseInt(go_page)+1)).html(parseInt(go_page)+1);
+					$("#p_"+(first_li)).attr('id','p_'+(parseInt(go_page)));
+					$("#p_"+parseInt(go_page)).html(parseInt(go_page));
+					first_li = parseInt(go_page);
+				}
+				$("#p_"+nowPage).removeClass("pagehover");
+				nowPage = parseInt(go_page);
+				$(".page span").html("当前页："+nowPage);
+				$("#p_"+nowPage).addClass("pagehover");
+				showData(nowPage,pageSize);	
+			}
+			
+			
+			
+		}
+		else if($(this).attr('class')=="pageleft"){
+			if(nowPage!=1){
+				if(nowPage==first_li){
+					first_li = first_li-1;
+					$("#p_"+(first_li+1)).attr('id','p_'+(first_li));
+					$("#p_"+(first_li)).html(first_li);
+					$("#p_"+(first_li+2)).attr('id','p_'+(first_li+1));
+					$("#p_"+(first_li+1)).html(first_li+1);
+					$("#p_"+(first_li+3)).attr('id','p_'+(first_li+2));
+					$("#p_"+(first_li+2)).html(first_li+2);
+				}
+				$("#p_"+nowPage).removeClass("pagehover");
+				nowPage = nowPage-1;
+				$(".page span").html("当前页："+nowPage);
+				$("#p_"+nowPage).addClass("pagehover");
+				showData(nowPage,pageSize);	
+			}
+		}
+		else if($(this).attr('class')=="pageright"){
+			if(nowPage!=pageTotal){
+			nowPage = nowPage+1;
+			if(nowPage>3){
+				first_li +=1;
+				$("#p_"+(first_li+1)).attr('id','p_'+(first_li+2));
+				$("#p_"+(first_li+2)).html(first_li+2);
+				$("#p_"+(first_li)).attr('id','p_'+(first_li+1));
+				$("#p_"+(first_li+1)).html(first_li+1);
+				$("#p_"+(first_li-1)).attr('id','p_'+(first_li));
+				$("#p_"+(first_li)).html(first_li);
+			}
+				$("#p_"+(nowPage-1)).removeClass("pagehover");
+				$("#p_"+nowPage).addClass("pagehover");
+				showData(nowPage,pageSize);	
+				$(".page span").html("当前页："+nowPage);
+			}
+		}
+		else{
+			var li_id =  $(this).attr('id');
+			if(li_id!="p_."){
+			var id_now = li_id.split("_")[1];
+			if(id_now!=nowPage){
+				$("#p_"+nowPage).removeClass("pagehover");
+		    	$(this).addClass("pagehover");
+		    	nowPage = parseInt(id_now);
+		    	$(".page span").html("当前页："+nowPage);
+		    	showData(nowPage,pageSize);	
+			}
+		}
+    	}
+    	$("#pageGo_text").val("");
+	});
+	
+	function showData(page,size){
+		var str = "";
+		var province_name = $("#province").val();
+		for ( i in data) {
+			if((page-1)*size<=i && i<page*size){
+	            if(data[i].province_name != null){
+	                str += "<tr class=\"recotitle\"><td>" + data[i].province_name + "</td>"; 
+	             }
+	             else{
+	                str+="<tr class=\"recotitle\"><td>"+province_name+"</td>";
+	             }
+	             var td_wl = "文科";
+	             if(data[i].wl=="L") td_wl="理科";
+	              str += "<td>"+data[i].year + "</td><td>" + td_wl + "</td><td>" + data[i].batch + 
+	              "</td><td>" + data[i].score + "</td></tr>";				
+			}
+		}
+		$("#showdata").html(str);
+	}
+
 
 	$(function () {
     $("#chaxun").click(function () {
@@ -48,28 +183,19 @@
     	var year =  $("#year").val();
     	var wl = $("#wl").val();
     	var batch = $("#batch").val();
-    	
+    	nowPage = 1;
+
         $.ajax({
             type: "GET",
             dataType: "json",
             data:{province:province_name, year:year, wl:wl, batch:batch}, 
             url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getProvinceBatchScore",
             success: function (msg) {
-                var str = "";
-                var datas = msg;
-                for (i in datas) {
-                	if(datas[i].province_name != null){
-                    	str += "<tr class=\"recotitle\"><td>" + datas[i].province_name + "</td>"; 
-                    }
-                    else{
-                    	str+="<tr><td>"+province_name+"</td>";
-                    }
-                    var td_wl = "文科";
-                    if(datas[i].wl=="L") td_wl="理科";
-                    str += "<td>"+datas[i].year + "</td><td>" + td_wl + "</td><td>" + datas[i].batch + 
-                    "</td><td>" + datas[i].score + "</td></tr>";
-                }
-                $("#showdata").html(str);
+                var total = msg.total[0];
+                itemTotal = total;
+                data = msg.data[0];
+				showData(nowPage,pageSize);
+                page_ul_init();
             }
         });
     });
@@ -81,7 +207,7 @@
 
 	<div class="content w1000">
 	<div class="inputout">
-	<h3>省批次线查询Demo</h3>
+	<h3>省批次线查询</h3>
 	<div class="recoform">
 	<table border="1" style="width:750px;">
 		<tr class="recotitle">
@@ -110,7 +236,7 @@
 	
 	<table border="1" style="width:750px;">
 		<thead>
-		<tr class="recotitle" style="text-align: center;">
+		<tr class="recotitle">
 			<th>省份</th>
 			<th>年份</th>
 			<th>文理科</th>
@@ -121,11 +247,17 @@
 		<tbody id="showdata"></tbody>
                     
 	</table>
+	    <div class="page">
+	    	
+            <ul class="clearFloat">
+
+             </ul> 
+         </div>
 	</div>
 	</div>
 	</div>
 
-
+<input id="JSONdata_hidden" type="hidden" value=""></input>
 
 </body>
 </html>

@@ -43,13 +43,15 @@ public class ScoreController {
 	@GET
 	@Path("/getProvinceBatchScore")
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ljt 
-	public JSONArray getProvinceBatchScore(@QueryParam("province") String province_name,
+	public JSONObject getProvinceBatchScore(@QueryParam("province") String province_name,
 			@QueryParam("year") String year, @QueryParam("wl") String WL, @QueryParam("batch") String batch, 
 			@QueryParam("page") int page, @QueryParam("size") int size) throws Exception{
 		int province_id = 0;
+		int list_size = 0;
 		List<ProvinceBatchScore> PBSlist = null;
 		JSONArray ret_jsonarray = new JSONArray();
 		JSONObject json = new JSONObject();
+		JSONObject json_ret = new JSONObject();
 		
 		ProvinceBatchScore pbs = new ProvinceBatchScore();
 		pbs.setYear(year);
@@ -61,17 +63,21 @@ public class ScoreController {
 			province_id = ps.getProvinceIdByProvinceNmae(province_name);
 			pbs.setProvince_id(province_id);
 			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
+			list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
 			for (int i = 0; i < PBSlist.size(); i++) {
 				json = ps.getProvinceBatchScoreJSONObject(PBSlist.get(i));
 				ret_jsonarray.put(json);
 			}
-			return ret_jsonarray;
+			json_ret.append("total", list_size);
+			json_ret.append("data", ret_jsonarray);
+			return json_ret;
 		}
 		
 		//当省份不作为查询参数时，需获取每一个数据中province_id对应的province_name
 		else{
 			pbs.setProvince_id(province_id);
 			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
+			list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
 			List<Province> allprovince = ps.getAllProvince();
 			for (int i = 0; i < PBSlist.size(); i++) {
 				province_id = PBSlist.get(i).getProvince_id();
@@ -81,7 +87,9 @@ public class ScoreController {
 				ret_jsonarray.put(json);
 			}
 			
-			return ret_jsonarray;
+			json_ret.append("total", list_size);
+			json_ret.append("data", ret_jsonarray);
+			return json_ret;
 		}
 		
 	}

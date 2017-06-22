@@ -38,6 +38,14 @@ public class ProvinceService {
 		return null;
 	}
 	
+	public int getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
+	{
+		int size = provinceBatchScoreDao.getProvinceBatchScoreSizeByAttrs(pbs);
+		if(size>0)
+			return size;
+		return 0;
+	}
+	
 	
 	//@代号：ljt 
 	public List<Province> getAllProvince()
