@@ -110,24 +110,24 @@ public class ScoreController {
 	}
 
     //该API调用方式如下：
-    //http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getMajorAdmitScore?school=2&major=1&province=4&year=2012&WL=W&batch=本科一批
+    //http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getMajorAdmissionScore?school=2&major=1&province=4&year=2012&WL=W&batch=本科一批
     @GET
-    @Path("/getMajorAdmitScore")
+    @Path("/getMajorAdmissionScore")
     @Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
-    public List<MajorAdmitScore> getMajorAdmitScore(@QueryParam("school") String schoolName, @QueryParam("major") String majorName,
+    public List<MajorAdmissionScore> getMajorAdmitScore(@QueryParam("school") String schoolName, @QueryParam("major") String majorName,
                                         @QueryParam("province") String province_name, @QueryParam("year") String year,
                                         @QueryParam("WL") String WL, @QueryParam("batch") String batch){
         int provinceId = ps.getProvinceIdByProvinceNmae(province_name);
         int schoolId = cs.getCollegeIdByName(schoolName);
         int majorId = ms.getMajorIdByName(majorName);
-        MajorAdmitScore mas = new MajorAdmitScore();
+        MajorAdmissionScore mas = new MajorAdmissionScore();
         mas.setSchool_id(schoolId);
         mas.setMajor_id(majorId);
         mas.setYear(year);
         mas.setAdmission_province_id(provinceId);
         mas.setWl(WL);
         mas.setBatch(batch);
-        List<MajorAdmitScore> list = ms.getMajorAdmitScoreByAttrs(mas);
+        List<MajorAdmissionScore> list = ms.getMajorAdmissionScoreByAttrs(mas);
         return list;
     }
 	

@@ -1,8 +1,8 @@
 package com.C1200.CollegeScoreLib.service;
 
-import com.C1200.CollegeScoreLib.dao.impl.MajorAdmitScoreDaoImpl;
+import com.C1200.CollegeScoreLib.dao.impl.MajorAdmissionScoreDaoImpl;
 import com.C1200.CollegeScoreLib.dao.impl.MajorDaoImpl;
-import com.C1200.CollegeScoreLib.entity.MajorAdmitScore;
+import com.C1200.CollegeScoreLib.entity.MajorAdmissionScore;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
  */
 public class MajorService{
     private MajorDaoImpl majorDao = new MajorDaoImpl();
-    private MajorAdmitScoreDaoImpl majorAdmitScoreDao = new MajorAdmitScoreDaoImpl();
+    private MajorAdmissionScoreDaoImpl majorAdmissionScoreDao = new MajorAdmissionScoreDaoImpl();
 
     public int getMajorIdByName(String name){
         int id = majorDao.getMajorIdByName(name);
         return id;
     }
 
-    public List<MajorAdmitScore> getMajorAdmitScoreByAttrs(MajorAdmitScore majorAdmitScore){
-        List<MajorAdmitScore> list =  majorAdmitScoreDao.getMajorAdmitScoreByAttrs(majorAdmitScore);
+    public List<MajorAdmissionScore> getMajorAdmissionScoreByAttrs(MajorAdmissionScore majorAdmissionScore){
+        List<MajorAdmissionScore> list =  majorAdmissionScoreDao.getMajorAdmissionScoreByAttrs(majorAdmissionScore);
         if(list != null && list.size() > 0){
             return list;
         }
