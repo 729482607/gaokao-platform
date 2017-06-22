@@ -17,4 +17,10 @@ public class CollegeService {
 		}
 		return null;
 	}
+
+    //@代号：ytl
+	public int getCollegeIdByName(String name) {
+		int id = collegeDaoImpl.getSchoolIdBySchoolName(name);
+		return id;
+	}
 }

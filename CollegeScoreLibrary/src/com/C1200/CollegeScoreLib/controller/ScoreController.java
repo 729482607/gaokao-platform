@@ -1,10 +1,8 @@
 package com.C1200.CollegeScoreLib.controller;
 
-import com.C1200.CollegeScoreLib.entity.Province;
-import com.C1200.CollegeScoreLib.entity.School;
-import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
-import com.C1200.CollegeScoreLib.entity.ScoreRank;
+import com.C1200.CollegeScoreLib.entity.*;
 import com.C1200.CollegeScoreLib.service.CollegeService;
+import com.C1200.CollegeScoreLib.service.MajorService;
 import com.C1200.CollegeScoreLib.service.ProvinceService;
 import com.C1200.CollegeScoreLib.service.ScoreRankService;
 
@@ -29,6 +27,7 @@ public class ScoreController {
 	private CollegeService cs = new CollegeService();
 	private ProvinceService ps = new ProvinceService();
 	private ScoreRankService srs = new ScoreRankService();
+	private MajorService ms = new MajorService();
 	
 	@GET
 	@Path("/getColleges")
@@ -87,7 +86,7 @@ public class ScoreController {
 	}
 	
 	//该API调用方式如下：
-	//http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getScoreRank?province=湖南&year=2012&WL=W
+	//http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getScoreRank?province=湖南&year=2012&WL=W
 	@GET
 	@Path("/getScoreRank")
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
@@ -101,6 +100,28 @@ public class ScoreController {
 		List<ScoreRank> list = srs.getScoreRankByAttrs(sr);
 		return list;
 	}
+
+    //该API调用方式如下：
+    //http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getMajorAdmitScore?school=2&major=1&province=4&year=2012&WL=W&batch=本科一批
+    @GET
+    @Path("/getMajorAdmitScore")
+    @Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
+    public List<MajorAdmitScore> getMajorAdmitScore(@QueryParam("school") String schoolName, @QueryParam("major") String majorName,
+                                        @QueryParam("province") String province_name, @QueryParam("year") String year,
+                                        @QueryParam("WL") String WL, @QueryParam("batch") String batch){
+        int provinceId = ps.getProvinceIdByProvinceNmae(province_name);
+        int schoolId = cs.getCollegeIdByName(schoolName);
+        int majorId = ms.getMajorIdByName(majorName);
+        MajorAdmitScore mas = new MajorAdmitScore();
+        mas.setSchool_id(schoolId);
+        mas.setMajor_id(majorId);
+        mas.setYear(year);
+        mas.setAdmission_province_id(provinceId);
+        mas.setWl(WL);
+        mas.setBatch(batch);
+        List<MajorAdmitScore> list = ms.getMajorAdmitScoreByAttrs(mas);
+        return list;
+    }
 	
 	@GET
 	@Path("/getJSONtest")
