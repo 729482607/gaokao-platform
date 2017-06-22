@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.C1200.CollegeScoreLib.dao.BaseDao;
 import com.C1200.CollegeScoreLib.entity.Province;
+import com.sun.istack.internal.Nullable;
 
 
 /**
@@ -29,17 +30,23 @@ public class ProvinceDaoImpl extends BaseDaoImpl<Province> implements BaseDao<Pr
 	
 	
 	//根据省名称获取省ID
-	public int getProvinceIdByProvinceName(String province_name)   //@代号：ljt 
+	public int getProvinceIdByProvinceName(String province_name)   //@代号：ljt
 	{
 		int id = 0;
+		if(province_name == null || province_name.length() == 0){
+			return id;
+		}
 		try {
 			Province province = getEntry("select * from tb_Province where province_name = ?", province_name);
-			id = province.getProvince_id();
-			
+			if(province != null){
+				id = province.getProvince_id();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return id;
+
+        return id;
 	}
 	
 	
