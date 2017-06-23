@@ -4,7 +4,6 @@ import com.C1200.CollegeScoreLib.entity.*;
 import com.C1200.CollegeScoreLib.service.CollegeService;
 import com.C1200.CollegeScoreLib.service.MajorService;
 import com.C1200.CollegeScoreLib.service.ProvinceService;
-import com.C1200.CollegeScoreLib.service.ScoreRankService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class ScoreController {
 	
 	private CollegeService cs = new CollegeService();
 	private ProvinceService ps = new ProvinceService();
-	private ScoreRankService srs = new ScoreRankService();
 	private MajorService ms = new MajorService();
 	
 	@GET
@@ -43,7 +41,7 @@ public class ScoreController {
 	@Path("/getProvinceBatchScore")
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ljt 
 	public JSONObject getProvinceBatchScore(@QueryParam("province") String province_name,
-			@QueryParam("year") String year, @QueryParam("wl") String WL, @QueryParam("batch") String batch, 
+			@QueryParam("year") String year, @QueryParam("WL") String WL, @QueryParam("batch") String batch, 
 			@QueryParam("page") int page, @QueryParam("size") int size) throws Exception{
 		int province_id = 0;
 		int list_size = 0;
@@ -59,7 +57,7 @@ public class ScoreController {
 		
 		//当省份作为查询参数时
 		if(province_name!=null && !province_name.equals("")){
-			province_id = ps.getProvinceIdByProvinceNmae(province_name);
+			province_id = ps.getProvinceIdByProvinceName(province_name);
 			pbs.setProvince_id(province_id);
 			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
 			list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
@@ -93,6 +91,77 @@ public class ScoreController {
 		
 	}
 	
+    @GET
+    @Path("/getTouDangXian")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JSONObject getTouDangXian(@QueryParam("school") String school_name, @QueryParam("major") String majorName,
+            @QueryParam("province") String province_name, @QueryParam("year") String year,
+            @QueryParam("WL") String WL, @QueryParam("batch") String batch,@QueryParam("page") int page, 
+            @QueryParam("size") int size) throws Exception{
+    	int province_id = 0;
+    	int school_id = 0;
+    	int major_id = 0;
+    	int list_size = 0;
+    	List<TouDangXian> list = null;
+    	TouDangXian tdx = new TouDangXian();
+    	JSONArray jsonarray = new JSONArray();
+		JSONObject json = new JSONObject();
+		JSONObject ret_json = new JSONObject();
+    	tdx.setYear(year);
+    	tdx.setWl(WL);
+    	tdx.setBatch(batch);
+    	
+    	if(province_name!=null && !province_name.equals("")){
+    		province_id = ps.getProvinceIdByProvinceName(province_name);
+    		tdx.setProvince_id(province_id);
+        	if(school_name!=null && !school_name.equals("")){
+        		school_id = cs.getCollegeIdByName(school_name);
+        		tdx.setSchool_id(school_id);
+        		if(majorName!=null && !majorName.equals("")){
+        			major_id = ms.getMajorIdByName(majorName);
+        			if(major_id>0){
+        				//list = ps.getTouDangXianByAttrs(tdx, page, size);
+        			}
+        			else{
+        				return null;
+        			}
+        		}
+        		else{
+        			list_size = ps.getTouDangXianSizeByAttrs(tdx);
+        			list = ps.getTouDangXianByAttrs(tdx, page, size);
+            		for (int i = 0; i < list.size(); i++) {
+        				json = ps.getTouDangXianJSONObject(list.get(i));
+        				jsonarray.put(json);
+    				}
+        			ret_json.append("total", list_size);
+        			ret_json.append("data", jsonarray);
+        			return ret_json;
+        		}	
+        	}
+        	else{
+        		list_size = ps.getTouDangXianSizeByAttrs(tdx);
+        		list = ps.getTouDangXianByAttrs(tdx, page, size);
+        		List<School> allschool = cs.getAllCollege();
+        		for (int i = 0; i < list.size(); i++) {
+        			school_id = list.get(i).getSchool_id();
+        			school_name = cs.getSchoolNameByIDFromList(school_id, allschool);
+    				json = ps.getTouDangXianJSONObject(list.get(i));
+    				json.append("school_name", school_name);
+    				jsonarray.put(json);
+				}
+    			ret_json.append("total", list_size);
+    			ret_json.append("data", jsonarray);
+    			return ret_json;
+        	}
+        	
+    	}
+    	else{
+    		return null;
+    	}
+    	
+    	return ret_json;
+    }
+	
 	//该API调用方式如下：
 	//http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getScoreRank?province=湖南&year=2012&WL=W
 	@GET
@@ -100,12 +169,12 @@ public class ScoreController {
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
 	public List<ScoreRank> getScoreRank(@QueryParam("province") String province_name,
 			@QueryParam("year") String year, @QueryParam("WL") String WL){
-		int province_id = ps.getProvinceIdByProvinceNmae(province_name);
+		int province_id = ps.getProvinceIdByProvinceName(province_name);
 		ScoreRank sr = new ScoreRank();
 		sr.setProvince_id(province_id);
 		sr.setYear(year);
 		sr.setWl(WL);
-		List<ScoreRank> list = srs.getScoreRankByAttrs(sr);
+		List<ScoreRank> list = ps.getScoreRankByAttrs(sr);
 		return list;
 	}
 
@@ -117,7 +186,7 @@ public class ScoreController {
     public List<MajorAdmissionScore> getMajorAdmitScore(@QueryParam("school") String schoolName, @QueryParam("major") String majorName,
                                         @QueryParam("province") String province_name, @QueryParam("year") String year,
                                         @QueryParam("WL") String WL, @QueryParam("batch") String batch){
-        int provinceId = ps.getProvinceIdByProvinceNmae(province_name);
+        int provinceId = ps.getProvinceIdByProvinceName(province_name);
         int schoolId = cs.getCollegeIdByName(schoolName);
         int majorId = ms.getMajorIdByName(majorName);
         MajorAdmissionScore mas = new MajorAdmissionScore();
@@ -130,26 +199,5 @@ public class ScoreController {
         List<MajorAdmissionScore> list = ms.getMajorAdmissionScoreByAttrs(mas);
         return list;
     }
-	
-	@GET
-	@Path("/getJSONtest")
-	@Produces(MediaType.APPLICATION_JSON)
-	public JSONArray APItest(){
-		List<String> list = new ArrayList<String>();
-		for (int i = 1; i < 6; i++) {
-			list.add("test_string_"+String.valueOf(i));
-		}
-		JSONArray json = new JSONArray(list);
-		return json;
-		
-	}
-	
-	@GET
-	@Path("/getStringTest")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String APItest2(){
-		return "API test!";
-		
-	}
 	
 }

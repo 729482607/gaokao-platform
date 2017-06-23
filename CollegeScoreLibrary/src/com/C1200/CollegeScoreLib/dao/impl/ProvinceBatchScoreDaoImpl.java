@@ -63,6 +63,7 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 		
 	}
 	
+	//@代号：ljt 
 	public int getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
 	{
 		int size=0;	
@@ -74,6 +75,7 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 				sql+=" where "+SQLqueryString;    //getSQLqueryString()根据类实例的各属性的值是否为有效值，来拼接sql查询语句
 			}
 			size = excSql_retSize(sql);
+			this.itemSize = size;
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,6 +83,8 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 		return size;
 	}
 	
+	
+	//@代号：ljt 
 	public JSONObject getProvinceBatchScoreJSONObject(ProvinceBatchScore pbs){
 		try {
 			return super.getJSONObject(pbs);
@@ -90,26 +94,10 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 		return null;
 	}
 	
-	//@代号：ljt    
-	//这是一个示例，实际不需要了
-//	public List<ProvinceBatchScore> getProvinceBatchScoreByProvinceAndYear(int province_id, String year){
-//		List<ProvinceBatchScore> list = new ArrayList<ProvinceBatchScore>();
-//		try {
-//			list = super.getEntrys("select * from tb_ProvinceBatchScore where province_id=? and year = ?",province_id,year);
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return list;
-//	}
-	
 	
 	public int getItemSize() {
 		return itemSize;
 	}
-
-
-
 
 	public void setItemSize(int itemSize) {
 		this.itemSize = itemSize;

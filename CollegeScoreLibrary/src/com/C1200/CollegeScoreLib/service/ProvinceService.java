@@ -1,20 +1,26 @@
 package com.C1200.CollegeScoreLib.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONObject;
 
 import com.C1200.CollegeScoreLib.dao.impl.ProvinceBatchScoreDaoImpl;
 import com.C1200.CollegeScoreLib.dao.impl.ProvinceDaoImpl;
+import com.C1200.CollegeScoreLib.dao.impl.ScoreRankDaoImpl;
+import com.C1200.CollegeScoreLib.dao.impl.TouDangXianDaoImpl;
 import com.C1200.CollegeScoreLib.entity.Province;
 import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
+import com.C1200.CollegeScoreLib.entity.ScoreRank;
+import com.C1200.CollegeScoreLib.entity.TouDangXian;
 
 
 public class ProvinceService {
 	
 	private ProvinceDaoImpl provinceDao = new ProvinceDaoImpl();
 	private ProvinceBatchScoreDaoImpl provinceBatchScoreDao = new ProvinceBatchScoreDaoImpl();
-	
+	private ScoreRankDaoImpl scoreRankDao = new ScoreRankDaoImpl();
+	private TouDangXianDaoImpl tdxDao = new TouDangXianDaoImpl();
 	
 	
 	public List<ProvinceBatchScore> getAllProvinceBatchScore()		//@代号：ljt 
@@ -38,6 +44,7 @@ public class ProvinceService {
 		return null;
 	}
 	
+	//@代号：ljt 
 	public int getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
 	{
 		int size = provinceBatchScoreDao.getProvinceBatchScoreSizeByAttrs(pbs);
@@ -58,15 +65,13 @@ public class ProvinceService {
 		return null;
 	}
 	
-	
 	//@代号：ljt
 	public JSONObject getProvinceBatchScoreJSONObject(ProvinceBatchScore pbs){
 		return provinceBatchScoreDao.getProvinceBatchScoreJSONObject(pbs);
 	}
-	
-	
+		
 	//@代号：ljt 
-	public int getProvinceIdByProvinceNmae(String province_name){
+	public int getProvinceIdByProvinceName(String province_name){
 		return provinceDao.getProvinceIdByProvinceName(province_name);
 	}
 	
@@ -84,6 +89,40 @@ public class ProvinceService {
 			}
 		}
 		return null;
+	}
+	
+	//@代号：ytl 
+	public List<ScoreRank> getScoreRankByAttrs(ScoreRank sr){
+		List<ScoreRank> list = scoreRankDao.getScoreRankByAttrs(sr);
+		if(list != null && list.size()>0)
+		{
+			return list;
+		}
+		return null;
+	}
+	
+	//@代号：ljt 
+	public List<TouDangXian> getTouDangXianByAttrs(TouDangXian tdx, int page, int size){
+		List<TouDangXian> list = tdxDao.getTouDangXianByAttrs(tdx, page, size);
+		if(list != null && list.size()>0)
+		{
+			return list;
+		}
+		return null;
+	}
+	
+	//@代号：ljt
+	public JSONObject getTouDangXianJSONObject(TouDangXian tdx){
+		return tdxDao.getTouDangXianJSONObject(tdx);
+	}
+	
+	//@代号：ljt 
+	public int getTouDangXianSizeByAttrs(TouDangXian tdx)
+	{
+		int size = tdxDao.getTouDangXianSizeByAttrs(tdx);
+		if(size>0)
+			return size;
+		return 0;
 	}
 	
 	

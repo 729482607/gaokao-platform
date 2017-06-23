@@ -671,7 +671,14 @@ body{
 	width: 120px
 }
 
-.recotitle td,th{
+.recotitle th{
+	line-height: 8px;
+	padding: 15px 5px;
+    width: 10%;
+    text-align: center;
+    font-size: 16px;
+}
+.recotitle td{
 	line-height: 8px;
 	padding: 15px 5px;
     width: 10%;
@@ -679,6 +686,22 @@ body{
     font-size: 16px;
 }
 .recotitle select{
+	height:27px;
+}
+
+.recotitle_s th{
+	line-height: 8px;
+	padding: 15px 5px;
+    text-align: center;
+    font-size: 15px;
+}
+.recotitle_s td{
+	line-height: 8px;
+	padding: 15px 5px;
+    text-align: center;
+    font-size: 15px;
+}
+.recotitle_s select{
 	height:27px;
 }
 
