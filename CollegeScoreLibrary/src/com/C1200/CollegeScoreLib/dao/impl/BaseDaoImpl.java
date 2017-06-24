@@ -216,10 +216,10 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 		return qr.query(JDBCUtils.getConnection(),sql,sh,objs);
 	}
 	
-	public int excSql_retSize(String sql, Object... objs) throws Exception {
+	public long excSql_retSize(String sql, Object... objs) throws Exception {
 		QueryRunner qr=new QueryRunner();
 		long ret = (Long)qr.query(JDBCUtils.getConnection(),sql,new ScalarHandler(),objs);
-		return new Long(ret).intValue();
+		return ret;
 	}
 
 	@Override
@@ -267,7 +267,8 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 				}
 			}
 		}
-		if(QueryString.indexOf('a')>0){
+
+		if(QueryString.lastIndexOf('a')>0){
 			QueryString = QueryString.substring(0, QueryString.lastIndexOf('a')-1);
 		}
 

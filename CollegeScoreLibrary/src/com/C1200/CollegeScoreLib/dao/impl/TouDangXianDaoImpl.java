@@ -10,7 +10,7 @@ import com.C1200.CollegeScoreLib.entity.TouDangXian;
 
 public class TouDangXianDaoImpl extends BaseDaoImpl<TouDangXian> implements BaseDao<TouDangXian>{
 	
-	private int itemSize=0;
+	private long itemSize=0;
 	
 	//获取数据库tb_TouDangXian表中所有的数据
 	public List<TouDangXian> getAllTouDangXian()   //@代号：ljt 
@@ -59,9 +59,9 @@ public class TouDangXianDaoImpl extends BaseDaoImpl<TouDangXian> implements Base
 	}
 	
 	//@代号：ljt 
-	public int getTouDangXianSizeByAttrs(TouDangXian tdx)
+	public long getTouDangXianSizeByAttrs(TouDangXian tdx)
 	{
-		int size=0;	
+		long size=0;	
 		String sql = "select count(*) from tb_TouDangXian";
 		String SQLqueryString = "";
 		try {
@@ -79,11 +79,11 @@ public class TouDangXianDaoImpl extends BaseDaoImpl<TouDangXian> implements Base
 	}
 	
 	
-	public int getItemSize() {
+	public long getItemSize() {
 		return itemSize;
 	}
 
-	public void setItemSize(int itemSize) {
+	public void setItemSize(long itemSize) {
 		this.itemSize = itemSize;
 	}
 }

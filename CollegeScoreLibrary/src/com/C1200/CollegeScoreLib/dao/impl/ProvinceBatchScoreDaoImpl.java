@@ -16,7 +16,7 @@ import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
 */
 public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> implements BaseDao<ProvinceBatchScore>{
 
-	private int itemSize=0;
+	private long itemSize=0;
 
 	//获取数据库tb_ProvinceBatchScore表中所有的数据
 	public List<ProvinceBatchScore> getAllProvinceBatchScore()   //@代号：ljt 
@@ -64,9 +64,9 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 	}
 	
 	//@代号：ljt 
-	public int getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
+	public long getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
 	{
-		int size=0;	
+		long size=0;	
 		String sql = "select count(*) from tb_ProvinceBatchScore";
 		String SQLqueryString = "";
 		try {
@@ -95,11 +95,11 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 	}
 	
 	
-	public int getItemSize() {
+	public long getItemSize() {
 		return itemSize;
 	}
 
-	public void setItemSize(int itemSize) {
+	public void setItemSize(long itemSize) {
 		this.itemSize = itemSize;
 	}
 		

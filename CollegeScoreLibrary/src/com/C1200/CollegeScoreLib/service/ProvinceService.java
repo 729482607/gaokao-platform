@@ -45,9 +45,9 @@ public class ProvinceService {
 	}
 	
 	//@代号：ljt 
-	public int getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
+	public long getProvinceBatchScoreSizeByAttrs(ProvinceBatchScore pbs)
 	{
-		int size = provinceBatchScoreDao.getProvinceBatchScoreSizeByAttrs(pbs);
+		long size = provinceBatchScoreDao.getProvinceBatchScoreSizeByAttrs(pbs);
 		if(size>0)
 			return size;
 		return 0;
@@ -117,9 +117,9 @@ public class ProvinceService {
 	}
 	
 	//@代号：ljt 
-	public int getTouDangXianSizeByAttrs(TouDangXian tdx)
+	public long getTouDangXianSizeByAttrs(TouDangXian tdx)
 	{
-		int size = tdxDao.getTouDangXianSizeByAttrs(tdx);
+		long size = tdxDao.getTouDangXianSizeByAttrs(tdx);
 		if(size>0)
 			return size;
 		return 0;

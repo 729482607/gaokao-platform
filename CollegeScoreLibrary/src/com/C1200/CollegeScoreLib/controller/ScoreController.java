@@ -44,11 +44,12 @@ public class ScoreController {
 			@QueryParam("year") String year, @QueryParam("WL") String WL, @QueryParam("batch") String batch, 
 			@QueryParam("page") int page, @QueryParam("size") int size) throws Exception{
 		int province_id = 0;
-		int list_size = 0;
-		List<ProvinceBatchScore> PBSlist = null;
-		JSONArray ret_jsonarray = new JSONArray();
+		long list_size = 0;
+		List<ProvinceBatchScore> list = null;
+		List<Province> allprovince = null;
+		JSONArray jsonarray = new JSONArray();
 		JSONObject json = new JSONObject();
-		JSONObject json_ret = new JSONObject();
+		JSONObject ret_json = new JSONObject();
 		
 		ProvinceBatchScore pbs = new ProvinceBatchScore();
 		pbs.setYear(year);
@@ -59,106 +60,165 @@ public class ScoreController {
 		if(province_name!=null && !province_name.equals("")){
 			province_id = ps.getProvinceIdByProvinceName(province_name);
 			pbs.setProvince_id(province_id);
-			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
-			list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
-			for (int i = 0; i < PBSlist.size(); i++) {
-				json = ps.getProvinceBatchScoreJSONObject(PBSlist.get(i));
-				ret_jsonarray.put(json);
-			}
-			json_ret.append("total", list_size);
-			json_ret.append("data", ret_jsonarray);
-			return json_ret;
+		}
+		else{
+			allprovince = ps.getAllProvince();
 		}
 		
-		//当省份不作为查询参数时，需获取每一个数据中province_id对应的province_name
-		else{
-			pbs.setProvince_id(province_id);
-			PBSlist = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
-			list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
-			List<Province> allprovince = ps.getAllProvince();
-			for (int i = 0; i < PBSlist.size(); i++) {
-				province_id = PBSlist.get(i).getProvince_id();
-				province_name = ps.getProvinceNameByIDFromList(province_id, allprovince);
-				json = ps.getProvinceBatchScoreJSONObject(PBSlist.get(i));
-				json.append("province_name", province_name);
-				ret_jsonarray.put(json);
+		list = ps.getProvinceBatchScoreByAttrs(pbs,page,size);
+		list_size = ps.getProvinceBatchScoreSizeByAttrs(pbs);
+		String province_name_put = "";
+		for (int i = 0; i < list.size(); i++) {
+			json = ps.getProvinceBatchScoreJSONObject(list.get(i));
+			//当省份不作为查询参数时，需获取每一个数据中province_id对应的province_name
+			if(province_name==null || province_name.equals("")){
+				province_id = list.get(i).getProvince_id();
+				province_name_put = ps.getProvinceNameByIDFromList(province_id, allprovince);
+				json.append("province_name", province_name_put);
 			}
-			
-			json_ret.append("total", list_size);
-			json_ret.append("data", ret_jsonarray);
-			return json_ret;
+			jsonarray.put(json);
 		}
+		ret_json.append("total", list_size);
+		ret_json.append("data", jsonarray);
+		return ret_json;
 		
 	}
 	
+	@GET
+	@Path("/getCollegeScore")
+	@Produces(MediaType.APPLICATION_JSON)			//@代号：ljt
+	public JSONObject getCollegeScore(@QueryParam("school") String school_name, 
+            @QueryParam("province") String province_name, @QueryParam("year") String year,
+            @QueryParam("WL") String WL, @QueryParam("batch") String batch,@QueryParam("page") int page, 
+            @QueryParam("size") int size) throws Exception{
+		int province_id = 0;
+		int school_id = 0;
+		long list_size = 0;
+		List<CollegeAdmissionScore> list = null;
+		List<Province> allprovince = null;
+    	List<School> allschool = null;
+		JSONArray jsonarray = new JSONArray();
+		JSONObject json = new JSONObject();
+		JSONObject ret_json = new JSONObject();
+		
+		CollegeAdmissionScore cas = new CollegeAdmissionScore();
+		cas.setYear(year);
+		cas.setWl(WL);
+		cas.setBatch(batch);
+		
+		if(province_name!=null && !province_name.equals("")){
+			province_id = ps.getProvinceIdByProvinceName(province_name);
+			cas.setAdmission_province_id(province_id);
+		}
+		else{
+			allprovince = ps.getAllProvince();
+		}
+    	if(school_name!=null && !school_name.equals("")){
+    		school_id = cs.getCollegeIdByName(school_name);
+    		cas.setSchool_id(school_id);
+    	}
+    	else{
+    		allschool = cs.getAllCollege();
+    	}
+		
+		String school_name_put="";
+		String province_name_put="";
+		list_size = cs.getCollegeAdmissionScoreSizeByAttrs(cas);
+		list = cs.getCollegeAdmissionScoreByAttrs(cas, page, size);
+		if(list!=null){
+			for (int i = 0; i < list.size(); i++) {
+				json = cs.getCollegeAdmissionScoreJSONObject(list.get(i));
+    			if(school_name==null || school_name.equals("")){
+	    			school_id = list.get(i).getSchool_id();
+	    			school_name_put = cs.getSchoolNameByIDFromList(school_id, allschool);
+					json.append("school_name", school_name_put);
+    			}
+    			if(province_name==null || province_name.equals("")){
+    				province_id = list.get(i).getAdmission_province_id();
+    				province_name_put = ps.getProvinceNameByIDFromList(province_id, allprovince);
+    				json.append("province_name", province_name_put);
+    			}
+				jsonarray.put(json);
+			}
+		}	
+		ret_json.append("total", list_size);
+		ret_json.append("data", jsonarray);
+		return ret_json;
+	}
+	
+	
+	
     @GET
     @Path("/getTouDangXian")
-    @Produces(MediaType.APPLICATION_JSON)
-    public JSONObject getTouDangXian(@QueryParam("school") String school_name, @QueryParam("major") String majorName,
+    @Produces(MediaType.APPLICATION_JSON)       //@代号：ljt
+    public JSONObject getTouDangXian(@QueryParam("school") String school_name, @QueryParam("major") String major_name,
             @QueryParam("province") String province_name, @QueryParam("year") String year,
             @QueryParam("WL") String WL, @QueryParam("batch") String batch,@QueryParam("page") int page, 
             @QueryParam("size") int size) throws Exception{
     	int province_id = 0;
     	int school_id = 0;
     	int major_id = 0;
-    	int list_size = 0;
+    	long list_size = 0;
     	List<TouDangXian> list = null;
+    	List<Province> allprovince = null;
+    	List<School> allschool = null;
     	TouDangXian tdx = new TouDangXian();
     	JSONArray jsonarray = new JSONArray();
 		JSONObject json = new JSONObject();
 		JSONObject ret_json = new JSONObject();
+		
     	tdx.setYear(year);
     	tdx.setWl(WL);
     	tdx.setBatch(batch);
     	
+    	major_name = "";  //暂时不做专业的投档线查询
+
     	if(province_name!=null && !province_name.equals("")){
     		province_id = ps.getProvinceIdByProvinceName(province_name);
     		tdx.setProvince_id(province_id);
-        	if(school_name!=null && !school_name.equals("")){
-        		school_id = cs.getCollegeIdByName(school_name);
-        		tdx.setSchool_id(school_id);
-        		if(majorName!=null && !majorName.equals("")){
-        			major_id = ms.getMajorIdByName(majorName);
-        			if(major_id>0){
-        				//list = ps.getTouDangXianByAttrs(tdx, page, size);
-        			}
-        			else{
-        				return null;
-        			}
-        		}
-        		else{
-        			list_size = ps.getTouDangXianSizeByAttrs(tdx);
-        			list = ps.getTouDangXianByAttrs(tdx, page, size);
-            		for (int i = 0; i < list.size(); i++) {
-        				json = ps.getTouDangXianJSONObject(list.get(i));
-        				jsonarray.put(json);
-    				}
-        			ret_json.append("total", list_size);
-        			ret_json.append("data", jsonarray);
-        			return ret_json;
-        		}	
-        	}
-        	else{
-        		list_size = ps.getTouDangXianSizeByAttrs(tdx);
-        		list = ps.getTouDangXianByAttrs(tdx, page, size);
-        		List<School> allschool = cs.getAllCollege();
-        		for (int i = 0; i < list.size(); i++) {
-        			school_id = list.get(i).getSchool_id();
-        			school_name = cs.getSchoolNameByIDFromList(school_id, allschool);
-    				json = ps.getTouDangXianJSONObject(list.get(i));
-    				json.append("school_name", school_name);
-    				jsonarray.put(json);
-				}
-    			ret_json.append("total", list_size);
-    			ret_json.append("data", jsonarray);
-    			return ret_json;
-        	}
-        	
     	}
     	else{
-    		return null;
+    		allprovince = ps.getAllProvince();
     	}
+    	if(school_name!=null && !school_name.equals("")){
+    		school_id = cs.getCollegeIdByName(school_name);
+    		tdx.setSchool_id(school_id);
+    	}
+    	else{
+    		allschool = cs.getAllCollege();
+    	}
+		if(major_name!=null && !major_name.equals("")){
+			major_id = ms.getMajorIdByName(major_name);
+			if(major_id>0){
+				tdx.setMajor_id(major_id);
+			}
+			else{
+				return null;
+			}
+		}
     	
+		String school_name_put="";
+		String province_name_put="";
+    	list_size = ps.getTouDangXianSizeByAttrs(tdx);
+		list = ps.getTouDangXianByAttrs(tdx, page, size);
+		if(list!=null){
+    		for (int i = 0; i < list.size(); i++) {
+    			json = ps.getTouDangXianJSONObject(list.get(i));
+    			if(school_name==null || school_name.equals("")){
+	    			school_id = list.get(i).getSchool_id();
+	    			school_name_put = cs.getSchoolNameByIDFromList(school_id, allschool);
+					json.append("school_name", school_name_put);
+    			}
+    			if(province_name==null || province_name.equals("")){
+    				province_id = list.get(i).getProvince_id();
+    				province_name_put = ps.getProvinceNameByIDFromList(province_id, allprovince);
+    				json.append("province_name", province_name_put);
+    			}
+    			jsonarray.put(json);
+			}
+		}
+		ret_json.append("total", list_size);
+		ret_json.append("data", jsonarray);
     	return ret_json;
     }
 	

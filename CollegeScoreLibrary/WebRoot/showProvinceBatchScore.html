@@ -151,7 +151,7 @@
 		var province_name = $("#province").val();
 		for ( i in data) {
 			if((page-1)*size<=i && i<page*size){
-	            if(data[i].province_name != null){
+	            if(data[i].province_name != null && data[i].province_name !=""){
 	                str += "<tr class=\"recotitle\"><td>" + data[i].province_name + "</td>"; 
 	             }
 	             else{
