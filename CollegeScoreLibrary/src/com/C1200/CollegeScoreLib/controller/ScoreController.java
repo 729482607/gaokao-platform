@@ -59,6 +59,10 @@ public class ScoreController {
 		//当省份作为查询参数时
 		if(province_name!=null && !province_name.equals("")){
 			province_id = ps.getProvinceIdByProvinceName(province_name);
+			if(province_id<1){
+				ret_json.put("error", "请输入正确的省份");
+				return ret_json;
+			}
 			pbs.setProvince_id(province_id);
 		}
 		else{
@@ -108,6 +112,10 @@ public class ScoreController {
 		
 		if(province_name!=null && !province_name.equals("")){
 			province_id = ps.getProvinceIdByProvinceName(province_name);
+			if(province_id<1){
+				ret_json.put("error", "请输入正确的省份");
+				return ret_json;
+			}
 			cas.setAdmission_province_id(province_id);
 		}
 		else{
@@ -115,6 +123,10 @@ public class ScoreController {
 		}
     	if(school_name!=null && !school_name.equals("")){
     		school_id = cs.getCollegeIdByName(school_name);
+			if(school_id<1){
+				ret_json.put("error", "抱歉，暂无此大学的数据");
+				return ret_json;
+			}
     		cas.setSchool_id(school_id);
     	}
     	else{
@@ -182,6 +194,10 @@ public class ScoreController {
     	}
     	if(school_name!=null && !school_name.equals("")){
     		school_id = cs.getCollegeIdByName(school_name);
+			if(school_id<1){
+				ret_json.put("error", "抱歉，暂无此大学的数据");
+				return ret_json;
+			}
     		tdx.setSchool_id(school_id);
     	}
     	else{

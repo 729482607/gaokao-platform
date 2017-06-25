@@ -21,6 +21,6 @@
 	</servlet-mapping>
 	
   <welcome-file-list>
-    <welcome-file>ShowProvinceBatchScore.html</welcome-file>
+    <welcome-file>ShowCollegeScore.html</welcome-file>
   </welcome-file-list>
 </web-app>

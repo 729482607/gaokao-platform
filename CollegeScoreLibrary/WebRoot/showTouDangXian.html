@@ -69,9 +69,8 @@
 		$(".clearFloat").html(ul_str);
 		$(".page span").html("当前页："+nowPage);
 		$("#p_1").addClass("pagehover");
-	}
-
-	$('li').live('click',function(){
+		
+			$(".clearFloat").on('click','li', function(){
 		if($(this).attr('id')=="pageGo"){
 			var go_page = $("#pageGo_text").val();
 			if(go_page!=null && go_page!="" && nowPage!=parseInt(go_page)){
@@ -143,6 +142,7 @@
     	}
     	$("#pageGo_text").val("");
 	});
+	}
 	
 	function showData(page,size){
 		var str = "";
@@ -166,7 +166,7 @@
 	             var td_wl = "文科";
 	             if(data[i].wl=="L") td_wl="理科";
 	             str += "<td>"+data[i].year + "</td><td>" + td_wl + "</td><td>" + data[i].batch + 
-	              "</td><td>"  + data[i].tdx_score +
+	              "</td><td>"  + data[i].tdx_score +  "</td><td>" + data[i].rankInProvince +
 	              "</td><td>" + data[i].chinese +"</td><td>" + data[i].math +
 	              "</td><td>" + data[i].english +"</td><td>" + data[i].admission_num +"</td></tr>";				
 			}
@@ -191,12 +191,19 @@
             data:{province:province_name, year:year, WL:wl, batch:batch, school:school_name}, 
             url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getTouDangXian",
             success: function (msg) {
-                var total = msg.total[0];
-                itemTotal = total;
-                data = msg.data[0];
-                pageTotal = Math.ceil(parseInt(itemTotal)/parseInt(pageSize));
-				showData(nowPage,pageSize);
-                page_ul_init();
+            	var error = msg.error;
+            	if(error!="" && error!=null)
+            	{
+            		alert(error);
+            	}
+            	else{
+	                var total = msg.total[0];
+	                itemTotal = total;
+	                data = msg.data[0];
+	                pageTotal = Math.ceil(parseInt(itemTotal)/parseInt(pageSize));
+					showData(nowPage,pageSize);
+	                page_ul_init();
+                }
             }
         });
     });
@@ -206,15 +213,16 @@
 
 </script>
 <body>
-		<div class="content w1000">
-	<div class="inputout" style="margin: 35px 20px 0;">
+		<div class="content w1200">
+		<iframe style="width:100%; height:104px;" frameborder=0 src="header.html" ></iframe>
+	<div class="inputout">
 	<h3>省投档线查询</h3>
-	<div class="recoform" style="margin: 35px 20px 0;">
-	<table border="1" style="width:925px;">
+	<div class="recoform" style="margin:30px 53px 0;">
+	<table border="1" style="width:1000px;">
 		<tr class="recotitle">
-		<td>学校名称:<input type="text" id="school_input" style="width:80px;"/>
+		<td>学校名称:&nbsp;<input type="text" id="school_input" style="width:135px;"/>
 		
-		录取省份:&nbsp;<select id="province" name="province"></select>
+		&nbsp;&nbsp;录取省份:&nbsp;<select id="province" name="province"></select>
 		
 		&nbsp;&nbsp;文理科:&nbsp;<select id="wl"  name="wl">
 		<option value="" ></option>
@@ -237,7 +245,7 @@
 								  	</tr>
 								  </table><br/>
 	
-	<table border="1" style="width:925px;">
+	<table border="1" style="width:1000px;">
 		<thead>
 		<tr class="recotitle_s">
 			<th >招生院校</th>
@@ -246,6 +254,7 @@
 			<th >文理科</th>
 			<th >录取批次</th>
 			<th >投档线</th>
+			<th >分数排名</th>
 			<th >语文</th>
 			<th >数学</th>
 			<th >英语</th>

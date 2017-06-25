@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JS鼠标悬停滑动效果导航条 - 站长素材</title>
+
+<link rel="stylesheet" href="css/sNav.css">
+
+<script src="js/sNav.min.js"></script>
+
+</head>
+<body>
+
+
+<ul class="sNav">
+	<a href="#"><li>sNav</li></a>
+	<a href="#"><li>导入sNav.js</li></a>
+	<a href="#"><li>搭建结构</li></a>
+	<a href="#"><li>执行语句</li></a>
+	<a href="#"><li>简单使用</li></a>
+	<a target="_blank" href="http://sc.chinaz.com/"><li>sNav.js</li></a>
+	<a target="_blank" href="http://sc.chinaz.com/"><li>sNav.min.js</li></a>
+</ul>
+	<ul class="example1">
+		<a href="#"><li>HOME</li></a>
+		<a href="#"><li>COMMUNITY</li></a>
+		<a href="#"><li>MUSIC</li></a>
+		<a href="#"><li>PHOTOGRAPHY</li></a>
+		<a href="#"><li>NEWS</li></a>
+		<a href="#"><li>MESSAGE</li></a>
+		<a href="#"><li>NOTICE</li></a>
+	</ul>
+<script>
+	var sNav1=new sNav('sNav');
+	sNav1.setText({
+		"5":"下载(3.5k)",
+		"6":"下载(2.1k)"
+	});
+
+	//-------------------------
+
+		var example1=new sNav('example1');
+
+</script>
+
+</body>
+</html>

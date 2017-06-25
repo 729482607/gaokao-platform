@@ -23,6 +23,7 @@ public class TouDangXian implements BaseEntity{
 	private String math;
 	private String english;
 	private String admission_num;		//录取人数
+	private String rankInProvince;
 	
 	public TouDangXian(){}
 	
@@ -123,6 +124,20 @@ public class TouDangXian implements BaseEntity{
 	public void setAdmission_num(String admission_num) {
 		this.admission_num = admission_num;
 	}
+	
+	
+
+	public String getRankInProvince() {
+		return rankInProvince;
+	}
+
+
+
+	public void setRankInProvince(String rankInProvince) {
+		this.rankInProvince = rankInProvince;
+	}
+
+
 
 	@Override
 	public String getPrimaryKey() {
