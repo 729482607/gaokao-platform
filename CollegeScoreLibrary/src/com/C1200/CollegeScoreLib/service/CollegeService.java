@@ -74,4 +74,14 @@ public class CollegeService {
 	public JSONObject getCollegeAdmissionScoreJSONObject(CollegeAdmissionScore cas){
 		return casDao.getCollegeAdmissionScoreJSONObject(cas);
 	}
+
+	//@代号：ytl
+	public List<CollegeAdmissionScore> getCollegeAdmissionScoreByScoreRange(CollegeAdmissionScore cas, String[] scoreRange){
+		List<CollegeAdmissionScore> list = casDao.getCollegeAdmissionScoreByScoreRange(cas, scoreRange);
+		if(list != null){
+			return list;
+		}
+
+		return null;
+	}
 }
