@@ -286,7 +286,7 @@ public class ScoreController {
 	}
 
     //该API调用方式如下：
-    //http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getMajorAdmissionScore?school=2&major=1&province=4&year=2012&WL=W&batch=本科一批
+    //http://localhost:8080/CollegeScoreLibrary/api/scoreLibrary/getMajorAdmissionScore?school=北京大学&major=工商管理类&province=4&year=2012&WL=W&batch=本科一批
     @GET
     @Path("/getMajorAdmissionScore")
     @Produces(MediaType.APPLICATION_JSON)			//@代号：ytl

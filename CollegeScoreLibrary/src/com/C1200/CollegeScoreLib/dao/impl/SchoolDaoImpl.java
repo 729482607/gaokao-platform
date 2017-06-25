@@ -6,6 +6,7 @@ import java.util.List;
 import com.C1200.CollegeScoreLib.dao.BaseDao;
 //import com.C1200.CollegeScoreLib.entity.ProvinceBatchScore;
 import com.C1200.CollegeScoreLib.entity.School;
+import com.C1200.CollegeScoreLib.entity.ScoreRank;
 
 
 /**
@@ -60,5 +61,19 @@ public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School
 			e.printStackTrace();
 		}
 		return s_name;
+	}
+
+	public List<School> getSchoolByAttrs(School school){
+		List<School> list = new ArrayList<>();
+		String sql = "select * from tb_school where ";
+		try {
+			sql += super.getSQLqueryString(school);
+			System.out.println(sql);
+			list = super.getEntrys(sql);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }
