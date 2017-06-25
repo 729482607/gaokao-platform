@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+	<link type="text/css" rel="stylesheet" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" href="css/index.css" />
+</head>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+    table td {
+        text-align: center;
+        border: 1px solid gray;
+        padding: 3px 10px;
+    }
+</style>
+<script type="text/javascript">
+	function fillSelect(){
+	var obj=document.getElementById("year");
+	for(var i=2017;i>2007;i--){
+	var op=new Option(i,i);
+	obj.add(op);
+	}
+	
+	var obj2 = document.getElementById("province");
+	var pro = ["北京","天津","上海","重庆","河北","山西","辽宁","吉林","黑龙江","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","海南","四川","贵州","云南","陕西","甘肃","青海","内蒙古","广西","西藏","宁夏","新疆"];//,"香港","澳门","台湾"];
+	for(var i=0;i<pro.length;i++){
+	var op = new Option(pro[i],pro[i]);
+	obj2.add(op);
+	}
+	obj2.options[17].selected = true;
+	
+	}
+	window.onload=fillSelect;
+	
+	
+	
+</script>
+<body>
+	<div class="content w1200">
+		<iframe style="width:100%; height:104px;" frameborder=0 src="header.html" ></iframe>
+	<div class="inputout">
+	<h3>根据分数获取推荐的高校</h3>
+		<div class="recoform" style="margin:30px 53px 0;">
+			<table border="1" style="width:1000px;">
+		<tr class="recotitle">
+		<td>录取省份:&nbsp;<select id="province" name="province"></select>
+		
+		&nbsp;&nbsp;文理科:&nbsp;<select id="wl"  name="wl">
+		<option value="W" >文科</option>
+		<option value="L" >理科</option></select>
+										
+										
+		&nbsp;&nbsp;年份:&nbsp;<select id="year" name="year">
+			</select>
+		&nbsp;&nbsp;高考分数:&nbsp;<input type="text" id="score_input" style="width:100px;"/>				
+		&nbsp;&nbsp;					
+		<input id="chaxun" type="button" value="查询" class='submit_a'/>
+										</td>
+								  	</tr>
+								  </table>
+					<br/>
+		<table border="1" style="width:1000px;">
+		<thead>
+		<tr class="recotitle_s">
+			<th >招生院校</th>
+			<th >招生省份</th>
+			<th >年份</th>
+			<th >文理科</th>
+			<th >录取批次</th>
+			<th >投档线</th>
+			<th >分数排名</th>
+			<th >录取人数</th>
+		</tr>
+		</thead>
+		<tbody id="showdata"></tbody>                 
+	</table>
+	
+		</div>
+	</div>	
+	</div>
+</body>
+</html>

@@ -27,7 +27,6 @@
 
 	function fillSelect(){
 	var obj=document.getElementById("year");
-	obj.add(new Option("",""));
 	for(var i=2017;i>2007;i--){
 	var op=new Option(i,i);
 	obj.add(op);
@@ -147,16 +146,9 @@
 	function showData(page,size){
 		var str = "";
 		var province_name = $("#province").val();
-		var school_name = $("#school_input").val();
 		for ( i in data) {
 			if((page-1)*size<=i && i<page*size){
 				str += "<tr class=\"recotitle_s\">";
-				if(data[i].school_name != null && data[i].school_name!=""){
-	                str += "<td>" + data[i].school_name + "</td>"; 
-	             }
-	             else{
-	                str+="<td>"+school_name+"</td>";
-	             }
 	            if(data[i].province_name != null && data[i].province_name!=""){
 	                str += "<td>" + data[i].province_name + "</td>"; 
 	             }
@@ -165,10 +157,17 @@
 	             }
 	             var td_wl = "文科";
 	             if(data[i].wl=="L") td_wl="理科";
-	             str += "<td>"+data[i].year + "</td><td>" + td_wl + "</td><td>" + data[i].batch + 
-	              "</td><td>"  + data[i].tdx_score +  "</td><td>" + data[i].rankInProvince +
-	              "</td><td>" + data[i].chinese +"</td><td>" + data[i].math +
-	              "</td><td>" + data[i].english +"</td><td>" + data[i].admission_num +"</td></tr>";				
+	             var td_extrapointType = "含全国性加分";
+	             if($("#extrapointType").val()==0){
+	             	td_extrapointType = "不含加分";
+	             }
+	             if($("#extrapointType").val()==2){
+	             	td_extrapointType = "含全国和地方性加分";
+	             }
+	             
+	             str += "<td>"+data[i].year + "</td><td>" + td_wl + "</td><td>" + data[i].subsectionType+"分段" + 
+	              "</td><td>"  + td_extrapointType +  "</td><td>" + data[i].score +
+	              "</td><td>" + data[i].numInScore +"</td><td>" + data[i].accumulateNum + "</td></tr>";				
 			}
 		}
 		$("#showdata").html(str);
@@ -180,16 +179,15 @@
     	var province_name = $("#province").val();
     	var year =  $("#year").val();
     	var wl = $("#wl").val();
-    	var batch = $("#batch").val();
-    	var school_name = $("#school_input").val();
+    	var extrapointType = $("#extrapointType").val();
     	nowPage = 1;
     	first_li=1;
 
         $.ajax({
             type: "GET",
             dataType: "json",
-            data:{province:province_name, year:year, WL:wl, batch:batch, school:school_name}, 
-            url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getTouDangXian",
+            data:{province:province_name, year:year, WL:wl, extrapointType:extrapointType}, 
+            url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getScoreRank",
             success: function (msg) {
             	var error = msg.error;
             	if(error!="" && error!=null)
@@ -216,28 +214,23 @@
 		<div class="content w1200">
 		<iframe style="width:100%; height:104px;" frameborder=0 src="header.html" ></iframe>
 	<div class="inputout">
-	<h3>省投档线查询</h3>
+	<h3>分段排名表查询</h3>
 	<div class="recoform" style="margin:30px 53px 0;">
 	<table border="1" style="width:1000px;">
 		<tr class="recotitle">
-		<td>学校名称:&nbsp;<input type="text" id="school_input" style="width:135px;"/>
-		
-		&nbsp;&nbsp;录取省份:&nbsp;<select id="province" name="province"></select>
+		<td>省份:&nbsp;<select id="province" name="province"></select>
 		
 		&nbsp;&nbsp;文理科:&nbsp;<select id="wl"  name="wl">
-		<option value="" ></option>
 		<option value="W" >文科</option>
-		<option value="L" >理科</option></select>
-										
-		&nbsp;&nbsp;录取批次:&nbsp;<select id="batch" name="batch">
-						<option value=""></option>
-						<option value="本科一批">本科一批</option>
-						<option value="本科二批">本科二批</option>
-						<option value="本科三批">本科三批</option>
-			</select>
+		<option value="L" >理科</option></select>									
 										
 		&nbsp;&nbsp;年份:&nbsp;<select id="year" name="year">
 			</select>
+			
+		&nbsp;&nbsp;录取批次:&nbsp;<select id="extrapointType" name="extrapointType">
+						<option value="1">含全国性加分</option>
+						<option value="2">含全国和地方性加分</option>
+			</select>			
 						
 		&nbsp;&nbsp;					
 		<input id="chaxun" type="button" value="查询" class='submit_a'/>
@@ -248,20 +241,18 @@
 	<table border="1" style="width:1000px;">
 		<thead>
 		<tr class="recotitle_s">
-			<th >招生院校</th>
-			<th >招生省份</th>
+			<th >省份</th>
 			<th >年份</th>
 			<th >文理科</th>
-			<th >录取批次</th>
-			<th >投档线</th>
-			<th >分数排名</th>
-			<th >语文</th>
-			<th >数学</th>
-			<th >英语</th>
-			<th >录取人数</th>
+			<th >分段类型</th>
+			<th >加分类型</th>
+			<th >分数</th>
+			<th >本段人数</th>
+			<th >累计排名</th>
 		</tr>
 		</thead>
-		<tbody id="showdata"></tbody>                 
+		<tbody id="showdata"></tbody>
+                    
 	</table>
 	    <div class="page">
 	    	

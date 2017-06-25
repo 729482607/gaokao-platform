@@ -102,6 +102,20 @@ public class ProvinceService {
 	}
 	
 	//@代号：ljt 
+	public JSONObject getScoreRankJSONObject(ScoreRank sr){
+			return scoreRankDao.getScoreRankJSONObject(sr);
+		}
+	
+	//@代号：ljt 
+	public long getScoreRankSizeByAttrs(ScoreRank sr){
+		long size = scoreRankDao.getScoreRankSizeByAttrs(sr);
+		if(size>0)
+			return size;
+		return 0;
+	}
+	
+	
+	//@代号：ljt 
 	public List<TouDangXian> getTouDangXianByAttrs(TouDangXian tdx, int page, int size){
 		List<TouDangXian> list = tdxDao.getTouDangXianByAttrs(tdx, page, size);
 		if(list != null && list.size()>0)

@@ -86,4 +86,8 @@ public class TouDangXianDaoImpl extends BaseDaoImpl<TouDangXian> implements Base
 	public void setItemSize(long itemSize) {
 		this.itemSize = itemSize;
 	}
+	
+//	public List<TouDangXian> getTouDangXianScopeByScore(String score){
+//		
+//	}
 }

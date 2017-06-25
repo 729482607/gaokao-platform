@@ -4,10 +4,7 @@ import com.C1200.CollegeScoreLib.entity.*;
 import com.C1200.CollegeScoreLib.service.CollegeService;
 import com.C1200.CollegeScoreLib.service.MajorService;
 import com.C1200.CollegeScoreLib.service.ProvinceService;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -243,15 +240,49 @@ public class ScoreController {
 	@GET
 	@Path("/getScoreRank")
 	@Produces(MediaType.APPLICATION_JSON)			//@代号：ytl
-	public List<ScoreRank> getScoreRank(@QueryParam("province") String province_name,
-			@QueryParam("year") String year, @QueryParam("WL") String WL){
-		int province_id = ps.getProvinceIdByProvinceName(province_name);
+	public JSONObject getScoreRank(@QueryParam("province") String province_name,@QueryParam("year") String year,
+			 @QueryParam("WL") String WL,@QueryParam("extrapointType") String extrapointType)throws Exception{
+    	int province_id = 0;
+    	long list_size = 0;
+    	List<ScoreRank> list = null;
+    	List<Province> allprovince = null;
 		ScoreRank sr = new ScoreRank();
-		sr.setProvince_id(province_id);
+    	JSONArray jsonarray = new JSONArray();
+		JSONObject json = new JSONObject();
+		JSONObject ret_json = new JSONObject();
+		
+		
 		sr.setYear(year);
 		sr.setWl(WL);
-		List<ScoreRank> list = ps.getScoreRankByAttrs(sr);
-		return list;
+		sr.setExtrapointType(extrapointType);
+		
+    	if(province_name!=null && !province_name.equals("")){
+    		province_id = ps.getProvinceIdByProvinceName(province_name);
+    		sr.setProvince_id(province_id);
+    	}
+    	else{
+    		allprovince = ps.getAllProvince();
+    	}
+		String province_name_put="";
+    	
+		list = ps.getScoreRankByAttrs(sr);
+		list_size = ps.getScoreRankSizeByAttrs(sr);
+		
+		if(list!=null){
+    		for (int i = 0; i < list.size(); i++) {
+    			json = ps.getScoreRankJSONObject(list.get(i));
+    			
+    			if(province_name==null || province_name.equals("")){
+    				province_id = list.get(i).getProvince_id();
+    				province_name_put = ps.getProvinceNameByIDFromList(province_id, allprovince);
+    				json.append("province_name", province_name_put);
+    			}
+    			jsonarray.put(json);
+			}
+		}
+		ret_json.append("total", list_size);
+		ret_json.append("data", jsonarray);
+    	return ret_json;
 	}
 
     //该API调用方式如下：
