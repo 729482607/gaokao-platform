@@ -18,6 +18,9 @@
     }
 </style>
 <script type="text/javascript">
+	
+	var data = null;
+	
 	function fillSelect(){
 	var obj=document.getElementById("year");
 	for(var i=2017;i>2007;i--){
@@ -37,6 +40,50 @@
 	window.onload=fillSelect;
 	
 	
+	function showData(page,size){
+		var str = "";
+		for ( i in data) {
+			if((page-1)*size<=i && i<page*size){
+				str += "<tr class=\"recotitle_s\">";
+	            str += "<td>" + data[i].school_name + "</td>"; 
+	             str += "<td>"+data[i].tdx_score +  "</td><td>" + data[i].rank +"</td><td>" + data[i].my_rank +
+	              "</td><td>" + data[i].riskType +"</td><td>" + data[i].admission_num +"</td></tr>";				
+			}
+		}
+		$("#showdata").html(str);
+	}
+
+
+	$(function () {
+    $("#chaxun").click(function () {
+    	var province_name = $("#province").val();
+    	var year =  $("#year").val();
+    	var wl = $("#wl").val();
+    	var score = $("#score_input").val();
+    	var compare_year = $("#compare_year").val();
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            data:{province:province_name, year:year, WL:wl, score:score,compare_year:compare_year}, 
+            url: "http://localhost:8090/CollegeScoreLibrary/api/recommend/getRecommendSchool",
+            success: function (msg) {
+            	var error = msg.error;
+            	if(error!="" && error!=null)
+            	{
+            		alert(error);
+            	}
+            	else{
+	                var total = msg.total[0];
+	                data = msg.data[0];
+	                $("#th_year_tdx").html(compare_year+"年投档线");
+	                $("#th_year_rank").html(compare_year+"年分数排名");
+					showData(1,100);
+                }
+            }
+        });
+    });
+});
 	
 </script>
 <body>
@@ -50,13 +97,17 @@
 		<td>录取省份:&nbsp;<select id="province" name="province"></select>
 		
 		&nbsp;&nbsp;文理科:&nbsp;<select id="wl"  name="wl">
-		<option value="W" >文科</option>
-		<option value="L" >理科</option></select>
+		<option value="L" >理科</option>
+		<option value="W" >文科</option></select>
 										
 										
-		&nbsp;&nbsp;年份:&nbsp;<select id="year" name="year">
+		&nbsp;&nbsp;高考年份:&nbsp;<select id="year" name="year">
 			</select>
-		&nbsp;&nbsp;高考分数:&nbsp;<input type="text" id="score_input" style="width:100px;"/>				
+		&nbsp;&nbsp;高考分数:&nbsp;<input type="text" id="score_input" style="width:100px;"/>		
+		&nbsp;&nbsp;参考年份:&nbsp;<select id="compare_year"  name="compare_year">
+		<option value="2016" >2016</option>
+		<option value="2015" >2015</option>
+		<option value="2014" >2014</option></select>		
 		&nbsp;&nbsp;					
 		<input id="chaxun" type="button" value="查询" class='submit_a'/>
 										</td>
@@ -66,13 +117,11 @@
 		<table border="1" style="width:1000px;">
 		<thead>
 		<tr class="recotitle_s">
-			<th >招生院校</th>
-			<th >招生省份</th>
-			<th >年份</th>
-			<th >文理科</th>
-			<th >录取批次</th>
-			<th >投档线</th>
-			<th >分数排名</th>
+			<th >推荐院校</th>
+			<th id="th_year_tdx">投档线</th>
+			<th id="th_year_rank">分数排名</th>
+			<th >我的排名</th>
+			<th >风险类型</th>
 			<th >录取人数</th>
 		</tr>
 		</thead>

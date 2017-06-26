@@ -87,7 +87,23 @@ public class TouDangXianDaoImpl extends BaseDaoImpl<TouDangXian> implements Base
 		this.itemSize = itemSize;
 	}
 	
-//	public List<TouDangXian> getTouDangXianScopeByScore(String score){
-//		
-//	}
+	public List<TouDangXian> getTouDangXianScopeByScore(TouDangXian tdx, String score, int offset){
+		List<TouDangXian> list = new ArrayList<TouDangXian>();	
+		String sql = "select * from tb_TouDangXian";
+		String SQLqueryString = "";
+		try {
+			SQLqueryString = super.getSQLqueryString(tdx); 
+			if(!SQLqueryString.equals("") && SQLqueryString!=null){
+				sql+=" where "+SQLqueryString;    //getSQLqueryString()根据类实例的各属性的值是否为有效值，来拼接sql查询语句
+				sql+=" and TDX_score>=\'"+(Integer.parseInt(score)-offset)+"\' and TDX_score <=\'"
+				+(Integer.parseInt(score)+offset)+"\' order by TDX_score DESC";
+			}
+			//System.out.println(sql);
+			list = super.getEntrys(sql);
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

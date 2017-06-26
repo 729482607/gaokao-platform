@@ -67,7 +67,7 @@ public class CollegeAdmissionScoreDaoImpl extends BaseDaoImpl<CollegeAdmissionSc
 	}
 	
 	public List<CollegeAdmissionScore> getCollegeAdmissionScoreByScoreRange(CollegeAdmissionScore cas, String[] rang){
-        List<CollegeAdmissionScore> list = new ArrayList<>();
+        List<CollegeAdmissionScore> list = new ArrayList<CollegeAdmissionScore>();
 	    String sql = "select * from tb_CollegeAdmissionScore where ";
 	    if(Integer.valueOf(rang[0]) > Integer.valueOf(rang[1])){
 	        String temp = rang[0];

@@ -53,7 +53,9 @@ public class ProvinceBatchScoreDaoImpl extends BaseDaoImpl<ProvinceBatchScore> i
 				if(page>0 && size>0){
 					sql+=" limit "+String.valueOf(pass_count)+","+String.valueOf(size);
 				}
+				sql+=" order by year desc";
 			}
+			System.out.println(sql);
 			list = super.getEntrys(sql);
 	
 		} catch (Exception e) {

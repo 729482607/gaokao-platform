@@ -64,7 +64,7 @@ public class SchoolDaoImpl extends BaseDaoImpl<School> implements BaseDao<School
 	}
 
 	public List<School> getSchoolByAttrs(School school){
-		List<School> list = new ArrayList<>();
+		List<School> list = new ArrayList<School>();
 		String sql = "select * from tb_school where ";
 		try {
 			sql += super.getSQLqueryString(school);
