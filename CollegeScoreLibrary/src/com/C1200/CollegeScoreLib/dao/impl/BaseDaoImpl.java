@@ -87,7 +87,7 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 		attr=attr.substring(0, attr.lastIndexOf(','));
 		lastsql=lastsql.substring(0, lastsql.lastIndexOf(','));
 		sb.append(attr).append(')').append(lastsql).append(')');
-//		System.out.println("saveSql:"+sb.toString());
+		System.out.println("saveSql:"+sb.toString());
 		excSql(sb.toString(),params.toArray());
 	}
 
@@ -97,10 +97,14 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 			tableName=((BaseEntity)t).getTableName();
 			if(tableName==null||tableName.trim().equals(""))
 			{
-				tableName=simpleName;
+				tableName=tablePredix+simpleName;
 			}
 		}
-		return "["+tableName+"]";
+		//SQL server
+		//return "["+tableName+"]";
+		
+		//Mysql
+		return tableName;
 	}
 
 	@Override

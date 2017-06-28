@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+<script>
+	$(function () {
+	 $("#register").click(function () {
+	 	
+	 	var valid = true;
+	 	var uname = $("#name").val();
+	 	var psw = $("#password").val();
+	 	var ARclass = $("#classes").val();
+	 	var wl = $("#WL").val();
+	 	var score = $("#score").val();
+	 	var reg = "^[0-9]{3}$";
+	 	var r = score.match(reg); 
+	 	
+	 	if(uname==null || uname=="" || psw==null || psw=="" || ARclass==null || ARclass==""){
+	 		alert("请输入正确的用户信息");
+	 		valid = false;
+	 	}
+	 	//if(!wl.localeCompare("文科") && !wl.localeCompare("理科")){
+	 	if(wl!="文科" && wl!="理科"){
+	 		alert("请输入文科或理科");
+	 		valid = false;
+	 	}
+	 	if(r==null || score>670){
+	 		alert("请输入正确的分数");
+	 		valid = false;
+	 	}
+	 	
+	 	if(valid){
+			$.ajax({
+				 type: "POST",
+				 url: "api/user/register",
+				 data: {username:uname,password:psw,ARclass:ARclass,WL:wl,score:score},
+				 dataType: "text",
+				 
+				 success: function(ret_data) {
+				 	
+				 	if(ret_data=="OK"){
+				 		alert("注册成功！");
+				 		window.location.href="Login.html"; 
+				 	}
+				 	else{
+				 		alert("出现故障，请检查输入信息是否有误！重新注册");
+				 	}
+				 
+				 }
+				 });
+		}
+	 }); 
+	});
+ 
+</script>
+
+<body class="style-2">
+
+		<div class="container">
+				<div class="col-md-4">
+					
+					<!-- Start Sign In Form -->
+					<form class="fh5co-form animate-box">
+						<h2>Sign Up</h2>
+					<!-- 	<div class="form-group">
+							<div class="alert alert-success" role="alert">Your info has been saved.</div>
+						</div>-->
+						<div class="form-group">
+							<label for="name" class="sr-only">姓名</label>
+							<input type="text" class="form-control" id="name" placeholder="姓名" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="classes" class="sr-only">班级</label>
+							<input type="text" class="form-control" id="classes" placeholder="班级" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="WL" class="sr-only">文科 or 理科</label>
+							<input type="text" class="form-control" id="WL" placeholder="文科 or 理科" autocomplete="off">
+						</div>
+
+						<div class="form-group">
+							<label for="score" class="sr-only">分数</label>
+							<input type="score" class="form-control" id="score" placeholder="分数" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">登录密码</label>
+							<input type="password" class="form-control" id="password" placeholder="登录密码" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
+						</div>
+						<div class="form-group">
+							<p>Already registered? <a href="Login.html">Sign In</a></p>
+						</div>
+						<div class="form-group">
+							<input type="button" value="Sign Up" class="btn btn-primary" id="register">
+						</div>
+					</form>
+					<!-- END Sign In Form -->
+
+
+				</div>
+			</div>
+			<div class="row" style="padding-top: 60px; clear: both;">
+				<div class="col-md-12 text-center"><p><small>Copyright &copy; 2012 - 2017 Class 1200 of AnRen No.1 middle school Inc. All Rights Reserved</small></p></div>
+			</div>
+
+</body>
+</html>
