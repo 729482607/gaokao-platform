@@ -61,7 +61,8 @@ public class RecommendService {
 
         if(list != null && list.size() > 0){
         	String numInScore = list.get(0).getNumInScore();
-            return String.valueOf(Integer.parseInt(list.get(0).getAccumulateNum())-Integer.parseInt(numInScore)/3*2);
+            //return String.valueOf(Integer.parseInt(list.get(0).getAccumulateNum())-Integer.parseInt(numInScore)/3*2);
+        	return list.get(0).getAccumulateNum();
         }
 
         return null;

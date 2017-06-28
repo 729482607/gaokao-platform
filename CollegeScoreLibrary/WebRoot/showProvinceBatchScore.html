@@ -83,7 +83,7 @@
             type: "GET",
             dataType: "json",
             data:{province:province_name, year:year, WL:wl, batch:batch}, 
-            url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getProvinceBatchScore",
+            url: "api/scoreLibrary/getProvinceBatchScore",
             success: function (msg) {
                 var total = msg.total[0];
                 itemTotal = total;

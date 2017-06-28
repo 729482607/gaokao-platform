@@ -91,7 +91,7 @@
             type: "GET",
             dataType: "json",
             data:{province:province_name, year:year, WL:wl, batch:batch, school:school_name}, 
-            url: "http://localhost:8090/CollegeScoreLibrary/api/scoreLibrary/getTouDangXian",
+            url: "api/scoreLibrary/getTouDangXian",
             success: function (msg) {
             	var error = msg.error;
             	if(error!="" && error!=null)
